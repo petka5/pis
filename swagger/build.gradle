@@ -1,0 +1,41 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagement}"
+
+    id "org.openapi.generator" version "${openApiGeneratorVersion}"
+}
+
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "$rootProject.projectDir/server/src/main/resources/api/api.yaml".toString()
+    outputDir = "$rootDir/swagger/build".toString()
+    apiPackage = "org.petka.pis.api"
+    invokerPackage = "org.petka.pis.invoker"
+    modelPackage = "org.petka.pis.model"
+    modelFilesConstrainedTo = []
+    configOptions = [
+            dateLibrary: "java11"
+    ]
+}
+
+// Generate code from swagger before compiling this project
+compileJava.dependsOn tasks.openApiGenerate
+
+// Add generated code as additional source code directory for this project
+sourceSets.main.java.srcDirs += "build/src/main/java"
+bootJar {
+    enabled = false
+}
+jar {
+    enabled = true
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    implementation "io.springfox:springfox-swagger2:2.9.2"
+    implementation "io.springfox:springfox-swagger-ui:2.9.2"
+    compile 'org.openapitools:openapi-generator:4.2.3'
+    compile 'org.openapitools:jackson-databind-nullable:0.2.1'
+}
