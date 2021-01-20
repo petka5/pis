@@ -6,8 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PisApplication {
 
-    public static void main(String[] args) {
+    /**
+     * Spring boot main class.
+     * @param args application arguments.
+     */
+    public static void main(final String[] args) {
         SpringApplication.run(PisApplication.class, args);
     }
-
 }
