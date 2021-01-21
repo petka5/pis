@@ -1,0 +1,36 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagement}"
+    id "org.openapi.generator" version "${openApiGeneratorVersion}"
+}
+
+openApiGenerate {
+    generatorName = "java"
+    library = 'resttemplate'
+    inputSpec = "$rootProject.projectDir/server/src/main/resources/api/api.yaml".toString()
+    outputDir = "$buildDir".toString()
+    apiPackage = "${group}.${rootProject.name}.sdk.api"
+    invokerPackage = "${group}.${rootProject.name}.sdk.invoker"
+    modelPackage = "${group}.${rootProject.name}.sdk.model"
+    modelFilesConstrainedTo = []
+    configOptions = [
+            dateLibrary: "java11"
+    ]
+}
+
+// Generate code from swagger before compiling this project
+compileJava.dependsOn tasks.openApiGenerate
+// Add generated code as additional source code directory for this project
+sourceSets.main.java.srcDirs += "${buildDir}/src/main/java"
+bootJar {
+    enabled = false
+}
+jar {
+    archivesBaseName = "${rootProject.name}-${project.name}"
+    enabled = true
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compile "org.openapitools:openapi-generator:${openApiGeneratorVersion}"
+}

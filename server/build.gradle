@@ -21,7 +21,7 @@ configurations {
 }
 
 dependencies {
-    implementation project(":swagger")
+    implementation project(":server-stub")
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-logging'
     implementation 'org.springframework:spring-web'

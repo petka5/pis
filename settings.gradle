@@ -1,3 +1,4 @@
 rootProject.name = 'pis'
 include 'server'
-include 'swagger'
+include 'server-stub'
+include 'sdk'

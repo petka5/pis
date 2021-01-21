@@ -1,17 +1,16 @@
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyManagement}"
-
     id "org.openapi.generator" version "${openApiGeneratorVersion}"
 }
 
 openApiGenerate {
     generatorName = "spring"
     inputSpec = "$rootProject.projectDir/server/src/main/resources/api/api.yaml".toString()
-    outputDir = "$rootDir/swagger/build".toString()
-    apiPackage = "org.petka.pis.api"
-    invokerPackage = "org.petka.pis.invoker"
-    modelPackage = "org.petka.pis.model"
+    outputDir = "$buildDir".toString()
+    apiPackage = "${group}.${rootProject.name}.api"
+    invokerPackage = "${group}.${rootProject.name}.invoker"
+    modelPackage = "${group}.${rootProject.name}.model"
     modelFilesConstrainedTo = []
     configOptions = [
             dateLibrary: "java11"
@@ -20,22 +19,21 @@ openApiGenerate {
 
 // Generate code from swagger before compiling this project
 compileJava.dependsOn tasks.openApiGenerate
-
 // Add generated code as additional source code directory for this project
-sourceSets.main.java.srcDirs += "build/src/main/java"
+sourceSets.main.java.srcDirs += "${buildDir}/src/main/java"
 bootJar {
     enabled = false
 }
 jar {
+    archivesBaseName = "${rootProject.name}-${project.name}"
     enabled = true
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-    implementation "io.springfox:springfox-swagger2:2.9.2"
-    implementation "io.springfox:springfox-swagger-ui:2.9.2"
-    compile 'org.openapitools:openapi-generator:4.2.3'
-    compile 'org.openapitools:jackson-databind-nullable:0.2.1'
+    implementation "io.springfox:springfox-swagger2:${springfoxSwaggeVersion}"
+    implementation "io.springfox:springfox-swagger-ui:${springfoxSwaggeVersion}"
+    compile "org.openapitools:openapi-generator:${openApiGeneratorVersion}"
+    compile "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullable}"
 }
