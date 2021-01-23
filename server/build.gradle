@@ -4,6 +4,7 @@ plugins {
     id 'com.github.spotbugs' version "${spotBugsVersion}"
     id 'jacoco'
     id 'checkstyle'
+    id "com.gorylenko.gradle-git-properties" version "${gitPropertiesVersion}"
 }
 
 configurations {
@@ -30,6 +31,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+springBoot  {
+    buildInfo()
 }
 
 test {

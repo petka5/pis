@@ -12,6 +12,7 @@ ext {
     openApiGeneratorVersion = '5.0.0'
     springfoxSwaggeVersion = "2.9.2"
     jacksonDatabindNullable = "0.2.1"
+    gitPropertiesVersion = "2.2.4"
 }
 
 subprojects {
