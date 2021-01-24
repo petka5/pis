@@ -73,6 +73,8 @@
     <!-- See https://checkstyle.org/config_sizes.html -->
     <module name="FileLength"/>
     <module name="LineLength">
+        <!-- Added by Petka -->
+        <property name="max" value="120"/>
         <property name="fileExtensions" value="java"/>
     </module>
 
@@ -103,9 +105,13 @@
         <module name="InvalidJavadocPosition"/>
         <module name="JavadocMethod"/>
         <module name="JavadocType"/>
-        <module name="JavadocVariable"/>
+        <!-- Comment by Petka  -->
+        <!-- module name="JavadocVariable"/-->
         <module name="JavadocStyle"/>
-        <module name="MissingJavadocMethod"/>
+        <!-- Added by Petka -->
+        <module name="MissingJavadocMethod">
+            <property name="tokens" value="METHOD_DEF, ANNOTATION_FIELD_DEF"/>
+        </module>
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See https://checkstyle.org/config_naming.html -->
@@ -163,7 +169,10 @@
         <!-- See https://checkstyle.org/config_coding.html -->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="HiddenField"/>
+        <!-- Added by Petka -->
+        <module name="HiddenField">
+            <property name="ignoreConstructorParameter" value="true" />
+        </module>
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
         <module name="MagicNumber"/>
@@ -174,7 +183,10 @@
 
         <!-- Checks for class design                         -->
         <!-- See https://checkstyle.org/config_design.html -->
-        <module name="DesignForExtension"/>
+        <!-- Added by Petka -->
+        <module name="DesignForExtension">
+            <property name="ignoredAnnotations" value="Override, Test"/>
+        </module>
         <module name="FinalClass"/>
         <!-- Comment by Petka  -->
         <!-- module name="HideUtilityClassConstructor"/-->
