@@ -13,6 +13,7 @@ openApiGenerate {
     modelPackage = "${group}.${rootProject.name}.model"
     modelFilesConstrainedTo = []
     configOptions = [
+            delegatePattern: "true",
             dateLibrary: "java11"
     ]
 }

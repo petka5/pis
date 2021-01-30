@@ -1,5 +1,7 @@
 package org.petka.pis.servicies;
 
+import java.util.List;
+
 import org.petka.pis.persistence.entities.Pet;
 import org.petka.pis.persistence.repositories.PetsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +25,14 @@ public class PetService {
      */
     public Pet create(final Pet pet) {
         return petsRepository.save(pet);
+    }
+
+    /**
+     * Get Pets from the database.
+     *
+     * @return LIst of Pets.
+     */
+    public List<Pet> findPets() {
+        return List.of(Pet.builder().id(1).name("test").build());
     }
 }

@@ -1,5 +1,7 @@
 package org.petka.pis.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.petka.pis.model.NewPet;
 import org.petka.pis.persistence.entities.Pet;
@@ -22,4 +24,13 @@ public interface PetsMapper {
      * @return DTO
      */
     org.petka.pis.model.Pet entityToDto(Pet pet);
+
+
+    /**
+     * Converts List of entities to List of dto's.
+     *
+     * @param pet entity
+     * @return DTO
+     */
+    List<org.petka.pis.model.Pet> entitiesToDtos(List<Pet> pet);
 }
