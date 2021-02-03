@@ -21,6 +21,6 @@ class PetsControllerTest {
 
     @Test
     void testGetPets() throws Exception {
-        this.mvc.perform(get("/petstore/pets")).andExpect(status().is2xxSuccessful());
+        this.mvc.perform(get("/pets")).andExpect(status().is2xxSuccessful());
     }
 }

@@ -6,6 +6,7 @@ plugins {
 
 openApiGenerate {
     generatorName = "spring"
+    library = 'spring-mvc'
     inputSpec = "$rootProject.projectDir/server/src/main/resources/api/api.yaml".toString()
     outputDir = "$buildDir".toString()
     apiPackage = "${group}.${rootProject.name}.api"
