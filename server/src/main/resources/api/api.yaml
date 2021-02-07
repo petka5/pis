@@ -49,9 +49,6 @@ paths:
       operationId: findPets
       produces:
         - application/json
-        - application/xml
-        - text/xml
-        - text/html
       parameters:
         - name: tags
           in: query
@@ -111,9 +108,6 @@ paths:
       operationId: findPetById
       produces:
         - application/json
-        - application/xml
-        - text/xml
-        - text/html
       parameters:
         - name: id
           in: path
