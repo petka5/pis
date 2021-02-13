@@ -37,7 +37,7 @@ public class PetsDelegator implements PetsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<Pet>> findPets(final List<String> tags, final Integer limit) {
+    public ResponseEntity<List<Pet>> findPets(final Integer page, final Integer size, final String sort) {
         log.info("Getting all pets");
         return new ResponseEntity<>(petsMapper.entitiesToDtos(petService.findPets()), HttpStatus.OK);
     }

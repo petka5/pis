@@ -22,4 +22,8 @@ public class Pet {
     private long id;
 
     private String name;
+
+    private String kind;
+
+    private int age;
 }

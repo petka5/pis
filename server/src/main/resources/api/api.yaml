@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
   title: Petka Infrastructure Project
   description: Api first project
@@ -12,7 +12,7 @@ info:
     url: http://opensource.org/licenses/MIT
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/petstore
+  - url: http://localhost:8080/
 security:
   - ApiKeyAuth: [ ]
 paths:
@@ -21,23 +21,9 @@ paths:
       description: Returns all pets from the system that the user has access to
       operationId: findPets
       parameters:
-        - name: tags
-          in: query
-          description: tags to filter by
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: limit
-          in: query
-          description: maximum number of results to return
-          schema:
-            maximum: 200
-            minimum: 1
-            type: integer
-            format: int32
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - $ref: '#/components/parameters/sort'
       responses:
         200:
           description: pet response
@@ -81,17 +67,10 @@ paths:
       x-codegen-request-body-name: pet
   /pets/{id}:
     get:
-      description: Returns a user based on a single ID, if the user does not have
-        access to the pet
+      description: Returns resource by the id
       operationId: findPetById
       parameters:
-        - name: id
-          in: path
-          description: ID of pet to fetch
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/id'
       responses:
         200:
           description: pet response
@@ -109,13 +88,7 @@ paths:
       description: deletes a single pet based on the ID supplied
       operationId: deletePet
       parameters:
-        - name: id
-          in: path
-          description: ID of pet to delete
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/id'
       responses:
         204:
           description: pet deleted
@@ -133,6 +106,42 @@ components:
       type: apiKey
       in: header
       name: api-key
+  parameters:
+    id:
+      name: id
+      in: path
+      description: ID of the resource
+      required: true
+      schema:
+        type: string
+        format: uuid
+    page:
+      name: page
+      in: query
+      description: Result page number.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+    size:
+      name: size
+      in: query
+      description: The size of the result page.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        maximum: 1000
+    sort:
+      name: sort
+      in: query
+      description: The name of a property to sort on and direction of sorting (asc or desc).
+      required: false
+      schema:
+        type: string
   schemas:
     pet:
       required:
@@ -145,8 +154,11 @@ components:
           format: int64
         name:
           type: string
-        tag:
+        kind:
           type: string
+        age:
+          type: integer
+          format: int64
     newPet:
       required:
         - name
@@ -157,8 +169,11 @@ components:
           format: int64
         name:
           type: string
-        tag:
+        kind:
           type: string
+        age:
+          type: integer
+          format: int64
     errorModel:
       required:
         - code

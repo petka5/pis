@@ -33,6 +33,6 @@ public class PetService {
      * @return LIst of Pets.
      */
     public List<Pet> findPets() {
-        return List.of(Pet.builder().id(1).name("test").build());
+        return petsRepository.findAll();
     }
 }
