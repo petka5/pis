@@ -11,6 +11,7 @@ ext {
     spotBugsVersion = '4.6.0'
     openApiGeneratorVersion = '5.0.1'
     springfoxSwaggeVersion = "2.9.2"
+    springCloudSleuth = "3.0.1"
     jacksonDatabindNullable = "0.2.1"
     gitPropertiesVersion = "2.2.4"
     mapstructVersion = "1.4.1.Final"

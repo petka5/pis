@@ -1,5 +1,7 @@
 # MySQL
 spring:
+  application:
+    name: PetkaInfra
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DATASOURCE_URL:jdbc:mysql://pis-db:3306/test}
