@@ -1,10 +1,10 @@
 package org.petka.pis.servicies;
 
-import java.util.List;
-
 import org.petka.pis.persistence.entities.Pet;
 import org.petka.pis.persistence.repositories.PetsRepository;
+import org.petka.pis.persistence.restquery.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,11 +28,13 @@ public class PetService {
     }
 
     /**
-     * Get Pets from the database.
+     * Search database by rest query.
      *
-     * @return LIst of Pets.
+     * @param query RestQuery
+     * @return Page of pets
      */
-    public List<Pet> findPets() {
-        return petsRepository.findAll();
+    public Page<Pet> search(final Query query) {
+        return petsRepository.search(query);
     }
 }
+

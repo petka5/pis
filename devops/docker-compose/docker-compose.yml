@@ -14,8 +14,8 @@ services:
       pis_db:
         condition: service_healthy
   pis_db:
-    image: mariadb:10.5.8
-    container_name: db
+    image: mariadb:10.5.9
+    container_name: pis_db
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 10s

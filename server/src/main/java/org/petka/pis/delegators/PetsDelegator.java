@@ -2,12 +2,13 @@ package org.petka.pis.delegators;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
+import org.modelmapper.ModelMapper;
 import org.petka.pis.api.PetsApiDelegate;
-import org.petka.pis.mapper.PetsMapper;
-import org.petka.pis.model.NewPet;
-import org.petka.pis.model.Pet;
+import org.petka.pis.model.PetPageResponse;
+import org.petka.pis.model.PetRequest;
+import org.petka.pis.model.PetResponse;
+import org.petka.pis.persistence.entities.Pet;
+import org.petka.pis.persistence.restquery.RequestQueryFilter;
 import org.petka.pis.servicies.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,25 +21,40 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class PetsDelegator implements PetsApiDelegate {
 
-    private final PetsMapper petsMapper;
     private final PetService petService;
+    private final RequestQueryFilter requestQueryFilter;
+
+    private final ModelMapper modelMapper;
+
 
     @Autowired
-    public PetsDelegator(final PetsMapper petsMapper, final PetService petService) {
-        this.petsMapper = petsMapper;
+    public PetsDelegator(final PetService petService, final RequestQueryFilter requestQueryFilter,
+                         final ModelMapper modelMapper) {
         this.petService = petService;
+        this.requestQueryFilter = requestQueryFilter;
+        this.modelMapper = modelMapper;
     }
 
 
     @Override
-    public ResponseEntity<Pet> addPet(@Valid final NewPet pet) {
-        return new ResponseEntity<>(petsMapper.entityToDto(petService.create(petsMapper.dtoToEntity(pet))),
-                                    HttpStatus.CREATED);
+    public ResponseEntity<PetResponse> addPet(final PetRequest pet) {
+
+        return new ResponseEntity<>(
+                modelMapper.map(petService.create(modelMapper.map(pet, Pet.class)), PetResponse.class),
+                HttpStatus.CREATED);
     }
 
+
     @Override
-    public ResponseEntity<List<Pet>> findPets(final Integer page, final Integer size, final String sort) {
+    public ResponseEntity<PetPageResponse> findPets(final @SuppressWarnings("unused") Integer page,
+                                                    final @SuppressWarnings("unused") Integer size,
+                                                    final @SuppressWarnings("unused") String sort,
+                                                    final @SuppressWarnings("unused") List<String> filter) {
         log.info("Getting all pets");
-        return new ResponseEntity<>(petsMapper.entitiesToDtos(petService.findPets()), HttpStatus.OK);
+
+        PetPageResponse response =
+                modelMapper.map(petService.search(requestQueryFilter.getRequestQuery()), PetPageResponse.class);
+        log.info("Founded pets {}", response.getNumber());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

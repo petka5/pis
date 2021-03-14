@@ -24,15 +24,14 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/size'
         - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
       responses:
         200:
           description: pet response
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/pet'
+                $ref: '#/components/schemas/PetPageResponse'
         default:
           description: unexpected error
           content:
@@ -48,7 +47,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/newPet'
+              $ref: '#/components/schemas/PetRequest'
         required: true
       responses:
         200:
@@ -56,7 +55,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/pet'
+                $ref: '#/components/schemas/PetResponse'
         default:
           description: unexpected error
           content:
@@ -77,7 +76,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/pet'
+                $ref: '#/components/schemas/PetResponse'
         default:
           description: unexpected error
           content:
@@ -142,11 +141,29 @@ components:
       required: false
       schema:
         type: string
+    filter:
+      name: filter
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
   schemas:
-    pet:
+    PetRequest:
       required:
-        - id
         - name
+        - kind
+        - age
+      type: object
+      properties:
+        name:
+          type: string
+        kind:
+          type: string
+        age:
+          type: integer
+          format: int64
+    PetResponse:
       type: object
       properties:
         id:
@@ -159,21 +176,26 @@ components:
         age:
           type: integer
           format: int64
-    newPet:
-      required:
-        - name
-      type: object
+    PetPageResponse:
+      allOf:
+        - $ref: '#/components/schemas/PageResponse'
       properties:
-        id:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/PetResponse'
+    PageResponse:
+      type: object
+      description: Response for Get All
+      properties:
+        total_elements:
           type: integer
-          format: int64
-        name:
-          type: string
-        kind:
-          type: string
-        age:
+        total_pages:
           type: integer
-          format: int64
+        number:
+          type: integer
+        size:
+          type: integer
     errorModel:
       required:
         - code

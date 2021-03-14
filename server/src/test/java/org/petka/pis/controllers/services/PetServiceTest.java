@@ -1,8 +1,7 @@
 package org.petka.pis.controllers.services;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.petka.pis.persistence.entities.Pet;
 import org.petka.pis.persistence.repositories.PetsRepository;
+import org.petka.pis.persistence.restquery.Query;
+import org.petka.pis.persistence.restquery.SearchCriteria;
+import org.petka.pis.persistence.restquery.SearchOperation;
 import org.petka.pis.servicies.PetService;
+import org.springframework.data.domain.Page;
 
 @ExtendWith(MockitoExtension.class)
 class PetServiceTest {
@@ -29,7 +32,9 @@ class PetServiceTest {
     @Test
     @DisplayName("Testing findPets method")
     void test() {
-        List<Pet> pets = petService.findPets();
-        Assertions.assertNotNull(pets);
+        Query query = new Query();
+        query.add(SearchCriteria.builder().key("name").operation(SearchOperation.EQUALITY).value("pet1").build());
+        Page<Pet> search = petService.search(query);
+        assertNull(search);
     }
 }
