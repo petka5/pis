@@ -1,5 +1,7 @@
 package org.petka.pis.persistence.repositories;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,24 +23,24 @@ import org.springframework.data.domain.Page;
 class PetsRepositorySpecTest {
 
     @Autowired
-    private PetsRepository petsRepository;
+    private CustomRepository<Pet, UUID> baseRepository;
 
     @BeforeEach
     public void init() {
         Pet pet1 = new Pet();
         pet1.setName("pet1");
-        petsRepository.save(pet1);
+        baseRepository.save(pet1);
 
         Pet pet2 = new Pet();
         pet2.setName("pet2");
-        petsRepository.save(pet2);
+        baseRepository.save(pet2);
     }
 
     @Test
     void testRepo() {
         Query query = new Query();
         query.add(SearchCriteria.builder().key("name").operation(SearchOperation.EQUALITY).value("pet1").build());
-        Page<Pet> search = petsRepository.search(query);
+        Page<Pet> search = baseRepository.search(query);
         Assertions.assertNotNull(search);
     }
 }

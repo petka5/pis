@@ -167,8 +167,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
         name:
           type: string
         kind:
@@ -176,6 +176,13 @@ components:
         age:
           type: integer
           format: int64
+        version:
+          type: integer
+          format: int64
+        create_date_time:
+          type: string
+        update_date_time:
+          type: string
     PetPageResponse:
       allOf:
         - $ref: '#/components/schemas/PageResponse'

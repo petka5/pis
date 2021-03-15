@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.petka.pis.persistence.entities.Pet;
-import org.petka.pis.persistence.repositories.PetsRepository;
+import org.petka.pis.persistence.repositories.PetRepository;
 import org.petka.pis.persistence.restquery.Query;
 import org.petka.pis.persistence.restquery.SearchCriteria;
 import org.petka.pis.persistence.restquery.SearchOperation;
@@ -20,13 +20,13 @@ import org.springframework.data.domain.Page;
 class PetServiceTest {
 
     @Mock
-    private PetsRepository petsRepository;
+    private PetRepository baseRepository;
 
     private PetService petService;
 
     @BeforeEach
     void init() {
-        petService = new PetService(petsRepository);
+        petService = new PetService(baseRepository);
     }
 
     @Test

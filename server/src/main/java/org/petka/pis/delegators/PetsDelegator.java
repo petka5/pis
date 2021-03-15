@@ -1,6 +1,7 @@
 package org.petka.pis.delegators;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.petka.pis.api.PetsApiDelegate;
@@ -38,7 +39,7 @@ public class PetsDelegator implements PetsApiDelegate {
 
     @Override
     public ResponseEntity<PetResponse> addPet(final PetRequest pet) {
-
+        log.info("Creating pet");
         return new ResponseEntity<>(
                 modelMapper.map(petService.create(modelMapper.map(pet, Pet.class)), PetResponse.class),
                 HttpStatus.CREATED);
@@ -51,10 +52,25 @@ public class PetsDelegator implements PetsApiDelegate {
                                                     final @SuppressWarnings("unused") String sort,
                                                     final @SuppressWarnings("unused") List<String> filter) {
         log.info("Getting all pets");
-
         PetPageResponse response =
                 modelMapper.map(petService.search(requestQueryFilter.getRequestQuery()), PetPageResponse.class);
         log.info("Founded pets {}", response.getNumber());
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<PetResponse> findPetById(final UUID id) {
+        log.info("Getting pet {}", id);
+        return petService.findById(id).map(e -> modelMapper.map(e, PetResponse.class))
+                .map(e -> new ResponseEntity<>(e, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public ResponseEntity<Void> deletePet(final UUID id) {
+        log.info("Deleting pet {}", id);
+        return petService.deleteById(id)
+                .map(e -> new ResponseEntity<Void>(HttpStatus.NO_CONTENT))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

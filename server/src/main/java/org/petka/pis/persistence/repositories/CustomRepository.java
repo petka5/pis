@@ -14,7 +14,7 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @param <K> type of the primary key.
  */
 @NoRepositoryBean
-public interface BaseRepository<T, K extends Serializable> extends JpaRepository<T, K> {
+public interface CustomRepository<T, K extends Serializable> extends JpaRepository<T, K> {
 
     /**
      * Method that executes query on the database.

@@ -18,11 +18,11 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
  * @param <T> type of the entity.
  * @param <K> type of the primary key.
  */
-public class BaseRepositoryImpl<T, K extends Serializable> extends SimpleJpaRepository<T, K>
-        implements BaseRepository<T, K> {
+public class CustomRepositoryImpl<T, K extends Serializable> extends SimpleJpaRepository<T, K>
+        implements CustomRepository<T, K> {
 
 
-    public BaseRepositoryImpl(final JpaEntityInformation<T, ?> entityInformation, final EntityManager entityManager) {
+    public CustomRepositoryImpl(final JpaEntityInformation<T, ?> entityInformation, final EntityManager entityManager) {
         super(entityInformation, entityManager);
     }
 
