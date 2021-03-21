@@ -10,8 +10,6 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -20,8 +18,6 @@ import lombok.Data;
 
 @Data
 @MappedSuperclass
-@Filter(name = "isDeleted")
-@FilterDef(name = "isDeleted", defaultCondition = "deleted = false")
 public class BaseEntity {
 
     @Id

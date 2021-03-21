@@ -35,7 +35,7 @@ public class BaseService<T extends BaseEntity> {
      * @param includeDeleted should deleted record will be included in the result
      * @return Page of T
      */
-    public Page<T> search(final RestQuery restQuery, boolean includeDeleted) {
+    public Page<T> search(final RestQuery restQuery, final boolean includeDeleted) {
         return repository.search(restQuery, includeDeleted);
     }
 

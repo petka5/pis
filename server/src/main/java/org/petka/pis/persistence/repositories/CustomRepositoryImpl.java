@@ -5,11 +5,12 @@ import java.util.Objects;
 
 import javax.persistence.EntityManager;
 
-import org.hibernate.Session;
 import org.petka.pis.persistence.restquery.CustomSpecification;
 import org.petka.pis.persistence.restquery.RestQuery;
 import org.petka.pis.persistence.restquery.SearchCriteria;
+import org.petka.pis.persistence.restquery.SearchOperation;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
@@ -25,11 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomRepositoryImpl<T, K extends Serializable> extends SimpleJpaRepository<T, K>
         implements CustomRepository<T, K> {
 
-    private final EntityManager entityManager;
 
     public CustomRepositoryImpl(final JpaEntityInformation<T, ?> entityInformation, final EntityManager entityManager) {
         super(entityInformation, entityManager);
-        this.entityManager = entityManager;
     }
 
 
@@ -40,7 +39,7 @@ public class CustomRepositoryImpl<T, K extends Serializable> extends SimpleJpaRe
      * @return Paged result
      */
     @Override
-    public Page<T> search(RestQuery restQuery) {
+    public Page<T> search(final RestQuery restQuery) {
         return search(restQuery, false);
     }
 
@@ -52,44 +51,26 @@ public class CustomRepositoryImpl<T, K extends Serializable> extends SimpleJpaRe
      * @return Paged result
      */
     @Override
-    public Page<T> search(final RestQuery restQuery, boolean includeDeleted) {
-        Session session = null;
-        try {
-            session = entityManager.unwrap(Session.class);
-            if (includeDeleted) {
-                session.disableFilter(IS_DELETED_FILTER_NAME);
-            } else {
-                session.enableFilter(IS_DELETED_FILTER_NAME);
-            }
+    public Page<T> search(final RestQuery restQuery, final boolean includeDeleted) {
 
-            return findAll(convertQueryToSpecification(restQuery), restQuery.getPagination());
-        } catch (Exception e) {
-            log.error("Error execution db query {}.", e.getMessage());
-        } finally {
-            if (Objects.nonNull(session) && includeDeleted) {
-                session.enableFilter(IS_DELETED_FILTER_NAME);
-            }
+        if (!includeDeleted) {
+            restQuery.add(SearchCriteria.builder().key("deleted").operation(SearchOperation.EQUALITY).value(false)
+                                  .build());
         }
-        return null;
+
+        return findAll(convertQueryToSpecification(restQuery), restQuery.getPagination());
     }
 
-    private CustomSpecification<T> convertQueryToSpecification(final RestQuery restQuery) {
-        CustomSpecification<T> specification = null;
+    private Specification<T> convertQueryToSpecification(final RestQuery restQuery) {
 
+        Specification<T> result = null;
         for (SearchCriteria criteria : restQuery.getCriteria()) {
-            specification = addCriteria(specification, criteria);
+            if (Objects.isNull(result)) {
+                result = new CustomSpecification<>(criteria);
+            } else {
+                result = Specification.where(result).and(new CustomSpecification<>(criteria));
+            }
         }
-
-        return specification;
-    }
-
-    private CustomSpecification<T> addCriteria(final CustomSpecification<T> specification,
-                                               final SearchCriteria criteria) {
-        CustomSpecification<T> localSpecification = new CustomSpecification<>(criteria);
-
-        if (Objects.isNull(specification)) {
-            return localSpecification;
-        }
-        return (CustomSpecification<T>) specification.and(localSpecification);
+        return result;
     }
 }

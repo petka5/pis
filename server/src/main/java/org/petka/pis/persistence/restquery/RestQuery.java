@@ -24,7 +24,8 @@ public final class RestQuery {
 
     }
 
-    public RestQuery(final Collection<SearchCriteria> criteria, final List<Sort.Order> orders, final Pageable pagination) {
+    public RestQuery(final Collection<SearchCriteria> criteria, final List<Sort.Order> orders,
+                     final Pageable pagination) {
         this.criteria = criteria;
         this.orders = orders;
         this.pagination = pagination;

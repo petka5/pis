@@ -19,8 +19,6 @@ import org.springframework.lang.NonNull;
 @NoRepositoryBean
 public interface CustomRepository<T, K extends Serializable> extends JpaRepository<T, K> {
 
-    String IS_DELETED_FILTER_NAME = "isDeleted";
-
     /**
      * Method that executes query on the database and returns non deleted records.
      *

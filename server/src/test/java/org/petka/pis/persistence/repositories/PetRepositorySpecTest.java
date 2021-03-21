@@ -1,8 +1,8 @@
 package org.petka.pis.persistence.repositories;
 
-import java.util.UUID;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.petka.pis.persistence.entities.Pet;
@@ -20,27 +20,28 @@ import org.springframework.data.domain.Page;
 //           questions/51127468/how-to-easy-implement-rest-api-query-language-with-querydsl-and-spring-data-to
 //https://www.baeldung.com/rest-api-query-search-or-operation
 @SpringBootTest
-class PetsRepositorySpecTest {
+class PetRepositorySpecTest {
 
     @Autowired
-    private CustomRepository<Pet, UUID> baseRepository;
+    private PetRepository petRepository;
 
     @BeforeEach
     public void init() {
         Pet pet1 = new Pet();
         pet1.setName("pet1");
-        baseRepository.save(pet1);
+        petRepository.save(pet1);
 
         Pet pet2 = new Pet();
         pet2.setName("pet2");
-        baseRepository.save(pet2);
+        petRepository.save(pet2);
     }
 
     @Test
     void testRepo() {
         RestQuery restQuery = new RestQuery();
         restQuery.add(SearchCriteria.builder().key("name").operation(SearchOperation.EQUALITY).value("pet1").build());
-        Page<Pet> search = baseRepository.search(restQuery);
-        Assertions.assertNotNull(search);
+        Page<Pet> search = petRepository.search(restQuery);
+        assertNotNull(search);
+        assertEquals(1, search.getTotalElements());
     }
 }

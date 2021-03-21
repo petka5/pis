@@ -66,19 +66,17 @@ public class RequestQueryFilter {
 
     private void handleParam(final RestQuery restQuery, final String param, final String value) {
         String symbolCandidate = StringUtils.substringBefore(value, SEPARATOR_CHARS);
-        SearchCriteria searchCriteria = SearchCriteria.builder().key(param)
-                .operation(SearchOperation.getSimpleOperation(symbolCandidate.charAt(0)))
-                .value(value).build();
-        restQuery.add(searchCriteria);
+        restQuery.add(SearchCriteria.builder().key(param)
+                              .operation(SearchOperation.getSimpleOperation(symbolCandidate.charAt(0))).value(value)
+                              .build());
     }
 
     private void handleFilterParam(final RestQuery restQuery, final String[] values) {
         for (String value : values) {
             String[] queryParam = StringUtils.split(value, SEPARATOR_CHARS);
-            SearchCriteria criteria = SearchCriteria.builder().key(queryParam[0])
-                    .operation(SearchOperation.getSimpleOperation(queryParam[1].charAt(0)))
-                    .value(queryParam[1].substring(1)).build();
-            restQuery.add(criteria);
+            restQuery.add(SearchCriteria.builder().key(queryParam[0])
+                                  .operation(SearchOperation.getSimpleOperation(queryParam[1].charAt(0)))
+                                  .value(queryParam[1].substring(1)).build());
         }
     }
 
