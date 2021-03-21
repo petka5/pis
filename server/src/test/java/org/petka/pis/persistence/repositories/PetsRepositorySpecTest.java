@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.petka.pis.persistence.entities.Pet;
-import org.petka.pis.persistence.restquery.Query;
+import org.petka.pis.persistence.restquery.RestQuery;
 import org.petka.pis.persistence.restquery.SearchCriteria;
 import org.petka.pis.persistence.restquery.SearchOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +38,9 @@ class PetsRepositorySpecTest {
 
     @Test
     void testRepo() {
-        Query query = new Query();
-        query.add(SearchCriteria.builder().key("name").operation(SearchOperation.EQUALITY).value("pet1").build());
-        Page<Pet> search = baseRepository.search(query);
+        RestQuery restQuery = new RestQuery();
+        restQuery.add(SearchCriteria.builder().key("name").operation(SearchOperation.EQUALITY).value("pet1").build());
+        Page<Pet> search = baseRepository.search(restQuery);
         Assertions.assertNotNull(search);
     }
 }

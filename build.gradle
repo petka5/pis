@@ -6,7 +6,7 @@ allprojects {
 }
 
 ext {
-    springBootVersion = '2.4.3'
+    springBootVersion = '2.4.4'
     springDependencyManagement = '1.0.11.RELEASE'
     spotBugsVersion = '4.6.0'
     openApiGeneratorVersion = '5.0.1'

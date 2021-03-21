@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-public final class Query {
+public final class RestQuery {
 
     static final int DEFAULT_PAGE_SIZE = 50;
     static final int MAX_PAGE_SIZE = 1000;
@@ -20,11 +20,11 @@ public final class Query {
 
     private Pageable pagination;
 
-    public Query() {
+    public RestQuery() {
 
     }
 
-    public Query(final Collection<SearchCriteria> criteria, final List<Sort.Order> orders, final Pageable pagination) {
+    public RestQuery(final Collection<SearchCriteria> criteria, final List<Sort.Order> orders, final Pageable pagination) {
         this.criteria = criteria;
         this.orders = orders;
         this.pagination = pagination;
@@ -36,7 +36,7 @@ public final class Query {
      * @param criterion search criteria.
      * @return this
      */
-    public Query add(final SearchCriteria criterion) {
+    public RestQuery add(final SearchCriteria criterion) {
         criteria.add(criterion);
         return this;
     }
@@ -56,7 +56,7 @@ public final class Query {
      * @param order order
      * @return this
      */
-    public Query add(final Sort.Order order) {
+    public RestQuery add(final Sort.Order order) {
         orders.add(order);
         return this;
     }
@@ -68,7 +68,7 @@ public final class Query {
      * @param size size of the page
      * @return this
      */
-    public Query paginate(final int page, final int size) {
+    public RestQuery paginate(final int page, final int size) {
         pagination = PageRequest.of(page, size);
         return this;
     }

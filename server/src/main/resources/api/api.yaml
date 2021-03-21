@@ -25,6 +25,7 @@ paths:
         - $ref: '#/components/parameters/size'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/includeDeleted'
       responses:
         200:
           description: pet response
@@ -91,7 +92,7 @@ paths:
       responses:
         204:
           description: pet deleted
-          content: {}
+          content: { }
         default:
           description: unexpected error
           content:
@@ -114,6 +115,14 @@ components:
       schema:
         type: string
         format: uuid
+    includeDeleted:
+      name: includeDeleted
+      in: query
+      description: Include deleted
+      required: false
+      schema:
+        type: boolean
+        default: false
     page:
       name: page
       in: query
@@ -183,6 +192,8 @@ components:
           type: string
         update_date_time:
           type: string
+        deleted:
+          type: boolean
     PetPageResponse:
       allOf:
         - $ref: '#/components/schemas/PageResponse'

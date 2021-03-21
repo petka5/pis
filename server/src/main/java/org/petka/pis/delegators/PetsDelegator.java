@@ -12,6 +12,7 @@ import org.petka.pis.persistence.entities.Pet;
 import org.petka.pis.persistence.restquery.RequestQueryFilter;
 import org.petka.pis.servicies.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -50,10 +51,12 @@ public class PetsDelegator implements PetsApiDelegate {
     public ResponseEntity<PetPageResponse> findPets(final @SuppressWarnings("unused") Integer page,
                                                     final @SuppressWarnings("unused") Integer size,
                                                     final @SuppressWarnings("unused") String sort,
-                                                    final @SuppressWarnings("unused") List<String> filter) {
+                                                    final @SuppressWarnings("unused") List<String> filter,
+                                                    final @DefaultValue("false") Boolean includeDeleted) {
         log.info("Getting all pets");
         PetPageResponse response =
-                modelMapper.map(petService.search(requestQueryFilter.getRequestQuery()), PetPageResponse.class);
+                modelMapper.map(petService.search(requestQueryFilter.getRequestQuery(), includeDeleted),
+                                PetPageResponse.class);
         log.info("Founded pets {}", response.getNumber());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

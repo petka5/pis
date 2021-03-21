@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.petka.pis.persistence.entities.Pet;
 import org.petka.pis.persistence.repositories.PetRepository;
-import org.petka.pis.persistence.restquery.Query;
+import org.petka.pis.persistence.restquery.RestQuery;
 import org.petka.pis.persistence.restquery.SearchCriteria;
 import org.petka.pis.persistence.restquery.SearchOperation;
 import org.petka.pis.servicies.PetService;
@@ -32,9 +32,9 @@ class PetServiceTest {
     @Test
     @DisplayName("Testing findPets method")
     void test() {
-        Query query = new Query();
-        query.add(SearchCriteria.builder().key("name").operation(SearchOperation.EQUALITY).value("pet1").build());
-        Page<Pet> search = petService.search(query);
+        RestQuery restQuery = new RestQuery();
+        restQuery.add(SearchCriteria.builder().key("name").operation(SearchOperation.EQUALITY).value("pet1").build());
+        Page<Pet> search = petService.search(restQuery);
         assertNull(search);
     }
 }

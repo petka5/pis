@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.petka.pis.persistence.entities.BaseEntity;
 import org.petka.pis.persistence.repositories.CustomRepository;
-import org.petka.pis.persistence.restquery.Query;
+import org.petka.pis.persistence.restquery.RestQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +21,26 @@ public class BaseService<T extends BaseEntity> {
     /**
      * Search database by rest query.
      *
-     * @param query RestQuery
-     * @return Page of pets
+     * @param restQuery RestQuery
+     * @return Page of T
      */
-    public Page<T> search(final Query query) {
-        return repository.search(query);
+    public Page<T> search(final RestQuery restQuery) {
+        return repository.search(restQuery, false);
     }
 
     /**
-     * Creates new Pet in the database.
+     * Search database by rest query.
+     *
+     * @param restQuery      RestQuery
+     * @param includeDeleted should deleted record will be included in the result
+     * @return Page of T
+     */
+    public Page<T> search(final RestQuery restQuery, boolean includeDeleted) {
+        return repository.search(restQuery, includeDeleted);
+    }
+
+    /**
+     * Creates new T in the database.
      *
      * @param entity new entity.
      * @return stored entity.
