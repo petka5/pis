@@ -1,4 +1,4 @@
-package org.petka.pis.servicies;
+package org.petka.pis.services;
 
 import org.petka.pis.persistence.entities.Pet;
 import org.petka.pis.persistence.repositories.PetRepository;

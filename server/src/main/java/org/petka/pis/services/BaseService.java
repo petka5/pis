@@ -1,4 +1,4 @@
-package org.petka.pis.servicies;
+package org.petka.pis.services;
 
 import java.util.Optional;
 import java.util.UUID;

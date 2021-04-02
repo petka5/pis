@@ -13,7 +13,7 @@ import org.petka.pis.persistence.repositories.PetRepository;
 import org.petka.pis.persistence.restquery.RestQuery;
 import org.petka.pis.persistence.restquery.SearchCriteria;
 import org.petka.pis.persistence.restquery.SearchOperation;
-import org.petka.pis.servicies.PetService;
+import org.petka.pis.services.PetService;
 import org.springframework.data.domain.Page;
 
 @ExtendWith(MockitoExtension.class)

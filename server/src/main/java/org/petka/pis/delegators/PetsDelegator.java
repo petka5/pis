@@ -10,7 +10,7 @@ import org.petka.pis.model.PetRequest;
 import org.petka.pis.model.PetResponse;
 import org.petka.pis.persistence.entities.Pet;
 import org.petka.pis.persistence.restquery.RequestQueryFilter;
-import org.petka.pis.servicies.PetService;
+import org.petka.pis.services.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.HttpStatus;
