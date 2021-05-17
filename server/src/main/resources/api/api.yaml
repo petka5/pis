@@ -153,10 +153,10 @@ components:
     filter:
       name: filter
       in: query
+      required: false
+      allowEmptyValue: true
       schema:
-        type: array
-        items:
-          type: string
+        type: string
   schemas:
     PetRequest:
       required:
@@ -188,9 +188,9 @@ components:
         version:
           type: integer
           format: int64
-        create_date_time:
+        createDateTime:
           type: string
-        update_date_time:
+        updateDateTime:
           type: string
         deleted:
           type: boolean
@@ -206,9 +206,9 @@ components:
       type: object
       description: Response for Get All
       properties:
-        total_elements:
+        totalElements:
           type: integer
-        total_pages:
+        totalPages:
           type: integer
         number:
           type: integer

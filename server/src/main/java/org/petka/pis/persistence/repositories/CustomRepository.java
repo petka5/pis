@@ -3,12 +3,14 @@ package org.petka.pis.persistence.repositories;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.petka.pis.persistence.restquery.RestQuery;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 /**
  * BaseRepository interface.
@@ -19,22 +21,16 @@ import org.springframework.lang.NonNull;
 @NoRepositoryBean
 public interface CustomRepository<T, K extends Serializable> extends JpaRepository<T, K> {
 
-    /**
-     * Method that executes query on the database and returns non deleted records.
-     *
-     * @param restQuery Query @{@link RestQuery}.
-     * @return Paged result
-     */
-    Page<T> search(RestQuery restQuery);
 
     /**
-     * Method that executes query on the database, based on includeDeleted it could returns deleted records as well.
+     * Method executes Specification request over the database.
      *
-     * @param restQuery      Query @{@link RestQuery}.
-     * @param includeDeleted denotes whether deleted records should be included in the result set.
-     * @return Paged result
+     * @param spec           Specification
+     * @param pageable       pageable
+     * @param includeDeleted whether deleted records should be included or not in the result set.
+     * @return Page of entities
      */
-    Page<T> search(RestQuery restQuery, boolean includeDeleted);
+    Page<T> findAll(@Nullable Specification<T> spec, Pageable pageable, boolean includeDeleted);
 
     /**
      * Overriding method to takes into account <B>deleted</B> field.

@@ -1,15 +1,14 @@
 package org.petka.pis.delegators;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.petka.pis.api.PetsApiDelegate;
+import org.petka.pis.components.SpecificationComponent;
 import org.petka.pis.model.PetPageResponse;
 import org.petka.pis.model.PetRequest;
 import org.petka.pis.model.PetResponse;
 import org.petka.pis.persistence.entities.Pet;
-import org.petka.pis.persistence.restquery.RequestQueryFilter;
 import org.petka.pis.services.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -24,16 +23,16 @@ import lombok.extern.slf4j.Slf4j;
 public class PetsDelegator implements PetsApiDelegate {
 
     private final PetService petService;
-    private final RequestQueryFilter requestQueryFilter;
-
+    private final SpecificationComponent specificationComponent;
     private final ModelMapper modelMapper;
 
 
     @Autowired
-    public PetsDelegator(final PetService petService, final RequestQueryFilter requestQueryFilter,
+    public PetsDelegator(final PetService petService,
+                         final SpecificationComponent specificationComponent,
                          final ModelMapper modelMapper) {
         this.petService = petService;
-        this.requestQueryFilter = requestQueryFilter;
+        this.specificationComponent = specificationComponent;
         this.modelMapper = modelMapper;
     }
 
@@ -48,14 +47,15 @@ public class PetsDelegator implements PetsApiDelegate {
 
 
     @Override
-    public ResponseEntity<PetPageResponse> findPets(final @SuppressWarnings("unused") Integer page,
-                                                    final @SuppressWarnings("unused") Integer size,
-                                                    final @SuppressWarnings("unused") String sort,
-                                                    final @SuppressWarnings("unused") List<String> filter,
+    public ResponseEntity<PetPageResponse> findPets(final Integer page, final Integer size, final String sort,
+                                                    final String filter,
                                                     final @DefaultValue("false") Boolean includeDeleted) {
         log.info("Getting all pets");
+
         PetPageResponse response =
-                modelMapper.map(petService.search(requestQueryFilter.getRequestQuery(), includeDeleted),
+                modelMapper.map(petService.findAll(specificationComponent.createSpecification(filter),
+                                                   specificationComponent.createPageRequest(page, size, sort),
+                                                   includeDeleted),
                                 PetPageResponse.class);
         log.info("Founded pets {}", response.getNumber());
         return new ResponseEntity<>(response, HttpStatus.OK);
