@@ -91,6 +91,8 @@
         <property name="message" value="Line has trailing spaces."/>
     </module>
 
+    <!-- Filter out Checkstyle warnings that have been suppressed with the @SuppressWarnings annotation -->
+    <module name="SuppressWarningsFilter" />
     <!-- Checks for Headers                                -->
     <!-- See https://checkstyle.org/config_header.html   -->
     <!-- <module name="Header"> -->
@@ -99,6 +101,8 @@
     <!-- </module> -->
 
     <module name="TreeWalker">
+        <!-- Make the @SuppressWarnings annotations available to Checkstyle -->
+        <module name="SuppressWarningsHolder" />
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See https://checkstyle.org/config_javadoc.html -->

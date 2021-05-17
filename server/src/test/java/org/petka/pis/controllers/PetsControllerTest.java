@@ -55,8 +55,8 @@ class PetsControllerTest {
                 .andExpect(jsonPath("$.kind", is(pet.getKind())))
                 .andExpect(jsonPath("$.age", is(pet.getAge())))
                 .andExpect(jsonPath("$.version", is(pet.getVersion()), Long.class))
-                .andExpect(jsonPath("$.create_date_time", is(pet.getCreateDateTime().toString())))
-                .andExpect(jsonPath("$.update_date_time", is(pet.getUpdateDateTime().toString())))
+                .andExpect(jsonPath("$.createDateTime", is(pet.getCreateDateTime().toString())))
+                .andExpect(jsonPath("$.updateDateTime", is(pet.getUpdateDateTime().toString())))
                 .andExpect(jsonPath("$.deleted", is(pet.isDeleted())));
     }
 
@@ -76,7 +76,7 @@ class PetsControllerTest {
                 .id(id).deleted(false).version(1)
                 .createDateTime(createdUpdated).updateDateTime(createdUpdated).build();
 
-        doReturn(new PageImpl<>(List.of(pet))).when(petService).search(any(), anyBoolean());
+        doReturn(new PageImpl<>(List.of(pet))).when(petService).findAll(any(), any(), anyBoolean());
         this.mockMvc.perform(get("/pets"))
                 .andExpect(status().is2xxSuccessful());
     }

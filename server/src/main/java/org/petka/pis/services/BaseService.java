@@ -5,8 +5,9 @@ import java.util.UUID;
 
 import org.petka.pis.persistence.entities.BaseEntity;
 import org.petka.pis.persistence.repositories.CustomRepository;
-import org.petka.pis.persistence.restquery.RestQuery;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,24 +20,15 @@ public class BaseService<T extends BaseEntity> {
     }
 
     /**
-     * Search database by rest query.
+     * Performs search over the database by given specification.
      *
-     * @param restQuery RestQuery
-     * @return Page of T
+     * @param spec           Specification
+     * @param page           pageable
+     * @param includeDeleted include deleted
+     * @return result
      */
-    public Page<T> search(final RestQuery restQuery) {
-        return repository.search(restQuery, false);
-    }
-
-    /**
-     * Search database by rest query.
-     *
-     * @param restQuery      RestQuery
-     * @param includeDeleted should deleted record will be included in the result
-     * @return Page of T
-     */
-    public Page<T> search(final RestQuery restQuery, final boolean includeDeleted) {
-        return repository.search(restQuery, includeDeleted);
+    public Page<T> findAll(final Specification<T> spec, final Pageable page, final boolean includeDeleted) {
+        return repository.findAll(spec, page, includeDeleted);
     }
 
     /**

@@ -15,6 +15,7 @@ ext {
     jacksonDatabindNullable = "0.2.1"
     modelMapper = "2.3.9"
     gitPropertiesVersion = "2.2.4"
+    springFilter = "1.0.2"
 }
 
 subprojects {

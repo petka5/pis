@@ -11,3 +11,8 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: create
+
+turkraft:
+  springfilter:
+    offsetdatetimeformatter:
+      pattern: yyyy-MM-dd'T'HH:mm:ssXXX
