@@ -57,7 +57,7 @@ public class PetsDelegator implements PetsApiDelegate {
                                                    specificationComponent.createPageRequest(page, size, sort),
                                                    includeDeleted),
                                 PetPageResponse.class);
-        log.info("Founded pets {}", response.getNumber());
+        log.info("Founded pets {}", response.getTotalElements());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

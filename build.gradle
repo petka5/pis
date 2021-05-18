@@ -6,15 +6,15 @@ allprojects {
 }
 
 ext {
-    springBootVersion = '2.4.4'
+    springBootVersion = '2.4.5'
     springDependencyManagement = '1.0.11.RELEASE'
-    spotBugsVersion = '4.6.0'
-    openApiGeneratorVersion = '5.0.1'
+    spotBugsVersion = '4.6.2'
+    openApiGeneratorVersion = '5.1.1'
     springfoxSwaggeVersion = "2.9.2"
-    springCloudSleuth = "3.0.1"
+    springCloudSleuth = "3.0.2"
     jacksonDatabindNullable = "0.2.1"
-    modelMapper = "2.3.9"
-    gitPropertiesVersion = "2.2.4"
+    modelMapper = "2.4.3"
+    gitPropertiesVersion = "2.3.1"
     springFilter = "1.0.2"
 }
 
@@ -28,5 +28,5 @@ subprojects {
 }
 
 wrapper {
-    gradleVersion = '6.8.3'
+    gradleVersion = '7.0.2'
 }
