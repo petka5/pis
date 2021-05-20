@@ -1,6 +1,6 @@
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
-    id 'io.spring.dependency-management' version "${springDependencyManagement}"
+    id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
     id 'com.github.spotbugs' version "${spotBugsVersion}"
     id 'jacoco'
     id 'checkstyle'
@@ -29,13 +29,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-tomcat'
-    implementation "org.modelmapper:modelmapper:${modelMapper}"
+    implementation "org.modelmapper:modelmapper:${modelMapperVersion}"
 
     implementation 'mysql:mysql-connector-java'
     implementation "io.springfox:springfox-swagger2:${springfoxSwaggeVersion}"
-    implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudSleuth}"
+    implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudSleuthVersion}"
 
-    implementation "com.turkraft:spring-filter:${springFilter}"
+    implementation "com.turkraft:spring-filter:${springFilterVersion}"
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

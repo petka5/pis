@@ -1,6 +1,6 @@
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
-    id 'io.spring.dependency-management' version "${springDependencyManagement}"
+    id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
     id "org.openapi.generator" version "${openApiGeneratorVersion}"
 }
 
@@ -10,7 +10,6 @@ openApiGenerate {
     inputSpec = "$rootProject.projectDir/server/src/main/resources/api/api.yaml".toString()
     outputDir = "$buildDir".toString()
     apiPackage = "${group}.${rootProject.name}.api"
-    invokerPackage = "${group}.${rootProject.name}.invoker"
     modelPackage = "${group}.${rootProject.name}.model"
     modelFilesConstrainedTo = []
     configOptions = [
@@ -37,5 +36,10 @@ dependencies {
     implementation "io.springfox:springfox-swagger2:${springfoxSwaggeVersion}"
     implementation "io.springfox:springfox-swagger-ui:${springfoxSwaggeVersion}"
     implementation "org.openapitools:openapi-generator:${openApiGeneratorVersion}"
-    implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullable}"
+    implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
+
+    testImplementation "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testImplementation "org.junit.jupiter:junit-jupiter-params"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 }
