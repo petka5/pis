@@ -9,15 +9,20 @@ info:
     email: petar.georgiev@gmail.com
   license:
     name: MIT
-    url: http://opensource.org/licenses/MIT
+    url: https://opensource.org/licenses/MIT
   version: 1.0.0
 servers:
   - url: http://localhost:8080/
 security:
   - ApiKeyAuth: [ ]
+tags:
+  - name: pets
+    description: Operations over the pets.
 paths:
   /pets:
     get:
+      tags:
+        - pets
       description: Returns all pets from the system that the user has access to
       operationId: findPets
       parameters:
@@ -41,6 +46,8 @@ paths:
                 $ref: '#/components/schemas/errorModel'
       x-api-first-handler: admin.Dashboard.methodLevel
     post:
+      tags:
+        - pets
       description: Creates a new pet in the store.  Duplicates are allowed
       operationId: addPet
       requestBody:
@@ -67,6 +74,8 @@ paths:
       x-codegen-request-body-name: pet
   /pets/{id}:
     get:
+      tags:
+        - pets
       description: Returns resource by the id
       operationId: findPetById
       parameters:
@@ -85,6 +94,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorModel'
     delete:
+      tags:
+        - pets
       description: deletes a single pet based on the ID supplied
       operationId: deletePet
       parameters:
