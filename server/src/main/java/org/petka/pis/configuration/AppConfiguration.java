@@ -1,6 +1,8 @@
 package org.petka.pis.configuration;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration.AccessLevel;
+import org.modelmapper.convention.MatchingStrategies;
 import org.petka.pis.persistence.repositories.CustomRepositoryImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +23,12 @@ public class AppConfiguration {
      */
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        var modelMapper = new ModelMapper();
+        modelMapper.getConfiguration()
+                .setAmbiguityIgnored(true)
+                .setMatchingStrategy(MatchingStrategies.STRICT)
+                .setFieldAccessLevel(AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true);
+        return modelMapper;
     }
 }

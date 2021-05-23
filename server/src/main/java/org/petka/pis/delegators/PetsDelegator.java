@@ -49,15 +49,16 @@ public class PetsDelegator implements PetsApiDelegate {
     @Override
     public ResponseEntity<PetPageResponse> findPets(final Integer page, final Integer size, final String sort,
                                                     final String filter,
-                                                    final @DefaultValue("false") Boolean includeDeleted) {
+                                                    final @DefaultValue("false") Boolean includeDeleted,
+                                                    final @DefaultValue("false") Boolean includeCount) {
         log.info("Getting all pets");
 
         PetPageResponse response =
                 modelMapper.map(petService.findAll(specificationComponent.createSpecification(filter),
                                                    specificationComponent.createPageRequest(page, size, sort),
-                                                   includeDeleted),
+                                                   includeDeleted, includeCount),
                                 PetPageResponse.class);
-        log.info("Founded pets {}", response.getTotalElements());
+        log.info("Founded pets {}", response.getNumberOfElements());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

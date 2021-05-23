@@ -1,11 +1,14 @@
 package org.petka.pis.persistence.repositories;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -25,12 +28,28 @@ public class CustomRepositoryImpl<T, K extends Serializable> extends SimpleJpaRe
     }
 
     @Override
-    public Page<T> findAll(final Specification<T> spec, final Pageable pageable, final boolean includeDeleted) {
+    public Slice<T> findAll(final Specification<T> spec, final Pageable pageable, final boolean includeDeleted,
+                            final boolean includeCount) {
 
         Specification<T> querySpec = spec;
         if (!includeDeleted) {
             querySpec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("deleted"), false));
         }
-        return findAll(querySpec, pageable);
+
+        if (includeCount) {
+            return findAll(querySpec, pageable);
+        }
+        return findAllSlice(spec, pageable);
+    }
+
+    private Slice<T> findAllSlice(final Specification<T> spec, final Pageable pageable) {
+        TypedQuery<T> query = getQuery(spec, pageable);
+        query.setMaxResults(pageable.getPageSize() + 1);
+        query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+        List<T> resultList = query.getResultList();
+        boolean hasNext = pageable.isPaged() && resultList.size() == pageable.getPageSize() + 1;
+
+        return new SliceImpl<>(hasNext ? resultList.subList(0, pageable.getPageSize()) : resultList, pageable,
+                               hasNext);
     }
 }

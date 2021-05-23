@@ -3,8 +3,8 @@ package org.petka.pis.persistence.repositories;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,9 +28,10 @@ public interface CustomRepository<T, K extends Serializable> extends JpaReposito
      * @param spec           Specification
      * @param pageable       pageable
      * @param includeDeleted whether deleted records should be included or not in the result set.
+     * @param includeCount   returns either slice or page
      * @return Page of entities
      */
-    Page<T> findAll(@Nullable Specification<T> spec, Pageable pageable, boolean includeDeleted);
+    Slice<T> findAll(@Nullable Specification<T> spec, Pageable pageable, boolean includeDeleted, boolean includeCount);
 
     /**
      * Overriding method to takes into account <B>deleted</B> field.

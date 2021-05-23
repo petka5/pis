@@ -76,7 +76,7 @@ class PetsControllerTest {
                 .id(id).deleted(false).version(1)
                 .createDateTime(createdUpdated).updateDateTime(createdUpdated).build();
 
-        doReturn(new PageImpl<>(List.of(pet))).when(petService).findAll(any(), any(), anyBoolean());
+        doReturn(new PageImpl<>(List.of(pet))).when(petService).findAll(any(), any(), anyBoolean(), anyBoolean());
         this.mockMvc.perform(get("/pets"))
                 .andExpect(status().is2xxSuccessful());
     }

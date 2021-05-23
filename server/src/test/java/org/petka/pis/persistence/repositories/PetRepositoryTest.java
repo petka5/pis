@@ -9,7 +9,7 @@ import org.petka.pis.components.SpecificationComponent;
 import org.petka.pis.persistence.entities.Pet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 
 //https://www.baeldung.com/rest-api-search-language-spring-data-specifications
@@ -35,10 +35,10 @@ class PetRepositoryTest {
     @SuppressWarnings("checkstyle:magicNumber")
     @Test
     void testRepo() {
-        Page<Pet> search = petRepository.findAll(specificationComponent.createSpecification("name:'pet1'"),
-                                                 specificationComponent.createPageRequest(0, 10, null),
-                                                 false);
+        Slice<Pet> search = petRepository.findAll(specificationComponent.createSpecification("name:'pet1'"),
+                                                  specificationComponent.createPageRequest(0, 10, null),
+                                                  false, false);
         assertNotNull(search);
-        assertEquals(1, search.getTotalElements());
+        assertEquals(1, search.getNumberOfElements());
     }
 }

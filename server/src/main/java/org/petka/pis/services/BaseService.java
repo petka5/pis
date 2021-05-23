@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import org.petka.pis.persistence.entities.BaseEntity;
 import org.petka.pis.persistence.repositories.CustomRepository;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +25,12 @@ public class BaseService<T extends BaseEntity> {
      * @param spec           Specification
      * @param page           pageable
      * @param includeDeleted include deleted
+     * @param includeCount   returns either slice or page
      * @return result
      */
-    public Page<T> findAll(final Specification<T> spec, final Pageable page, final boolean includeDeleted) {
-        return repository.findAll(spec, page, includeDeleted);
+    public Slice<T> findAll(final Specification<T> spec, final Pageable page, final boolean includeDeleted,
+                            final boolean includeCount) {
+        return repository.findAll(spec, page, includeDeleted, includeCount);
     }
 
     /**

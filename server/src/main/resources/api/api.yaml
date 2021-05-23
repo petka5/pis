@@ -31,6 +31,7 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/includeDeleted'
+        - $ref: '#/components/parameters/includeCount'
       responses:
         200:
           description: pet response
@@ -134,6 +135,14 @@ components:
       schema:
         type: boolean
         default: false
+    includeCount:
+      name: includeCount
+      in: query
+      description: Include count
+      required: false
+      schema:
+        type: boolean
+        default: false
     page:
       name: page
       in: query
@@ -221,6 +230,10 @@ components:
           type: integer
         totalPages:
           type: integer
+        numberOfElements:
+          type: integer
+        hasNext:
+          type: boolean
         number:
           type: integer
         size:
