@@ -1,6 +1,8 @@
 package org.petka.pis.persistence.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
@@ -25,4 +27,20 @@ public class Pet extends BaseEntity {
     private String kind;
 
     private int age;
+
+    @Enumerated(EnumType.STRING)
+    private Type type;
+}
+
+enum Type {
+    DOMESTIC("Domestic"), WILD("Wild");
+    private final String value;
+
+    Type(final String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

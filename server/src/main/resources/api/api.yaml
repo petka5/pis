@@ -183,6 +183,7 @@ components:
         - name
         - kind
         - age
+        - type
       type: object
       properties:
         name:
@@ -192,6 +193,8 @@ components:
         age:
           type: integer
           format: int64
+        type:
+          $ref: '#/components/schemas/Type'
     PetResponse:
       type: object
       properties:
@@ -205,6 +208,8 @@ components:
         age:
           type: integer
           format: int64
+        type:
+          $ref: '#/components/schemas/Type'
         version:
           type: integer
           format: int64
@@ -238,6 +243,11 @@ components:
           type: integer
         size:
           type: integer
+    Type:
+      type: string
+      enum:
+        - DOMESTIC
+        - WILD
     errorModel:
       required:
         - code

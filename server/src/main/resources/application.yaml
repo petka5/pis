@@ -7,6 +7,9 @@ spring:
     url: ${DATASOURCE_URL:jdbc:mysql://pis-db:3306/test}
     username: ${DATASOURCE_USERNAME:root}
     password: ${DATASOURCE_PASSWORD:petka}
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
