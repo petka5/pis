@@ -31,6 +31,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation "org.modelmapper:modelmapper:${modelMapperVersion}"
+    implementation "com.github.spotbugs:spotbugs-annotations:${spotBugsAnnotationsVersion}"
+
 
     implementation 'mysql:mysql-connector-java'
     implementation "io.springfox:springfox-swagger2:${springfoxSwaggeVersion}"
@@ -38,11 +40,11 @@ dependencies {
 
     implementation "com.turkraft:spring-filter:${springFilterVersion}"
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.16'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.h2database:h2'
 }

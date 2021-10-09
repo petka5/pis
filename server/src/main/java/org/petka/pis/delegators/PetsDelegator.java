@@ -10,31 +10,24 @@ import org.petka.pis.model.PetRequest;
 import org.petka.pis.model.PetResponse;
 import org.petka.pis.persistence.entities.Pet;
 import org.petka.pis.services.PetService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
+@SuppressFBWarnings(value = {"EI_EXPOSE_REP2"}, justification = "Model mapper could be changed.")
 public class PetsDelegator implements PetsApiDelegate {
 
     private final PetService petService;
     private final SpecificationComponent specificationComponent;
     private final ModelMapper modelMapper;
-
-
-    @Autowired
-    public PetsDelegator(final PetService petService,
-                         final SpecificationComponent specificationComponent,
-                         final ModelMapper modelMapper) {
-        this.petService = petService;
-        this.specificationComponent = specificationComponent;
-        this.modelMapper = modelMapper;
-    }
 
 
     @Override

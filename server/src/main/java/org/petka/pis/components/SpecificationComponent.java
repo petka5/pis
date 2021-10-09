@@ -38,7 +38,7 @@ public final class SpecificationComponent {
      * @param page page number
      * @param size page size
      * @param sort sort
-     * @return Pageble
+     * @return Pageable
      */
     public Pageable createPageRequest(final Integer page, final Integer size, final String sort) {
         if (Objects.isNull(sort)) {
