@@ -1,0 +1,30 @@
+resources:
+  - name: every_minute
+    type: time
+    source: { interval: 1m }
+
+jobs:
+  - name: hello-world-job
+    plan:
+      - get: every_minute
+        trigger: true
+      - task: hello-world-task
+        config:
+          # Tells Concourse which type of worker this task should run on
+          platform: linux
+          # This is one way of telling Concourse which container image to use for a
+          # task. We'll explain this more when talking about resources
+          image_resource:
+            #name: test
+            type: docker-image
+            source:
+              # images are pulled from docker hub by default
+              repository: registry.local:5000/test
+              insecure_registries:
+                - registry.local:5000
+
+          # The command Concourse will run inside the container
+          # echo "Hello world!"
+          run:
+            path: /test.py
+          #  args: [ "Hello world!" ]

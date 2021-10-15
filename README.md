@@ -4,16 +4,30 @@
 
 * [Swagger UI](http://localhost:8080/swagger-ui.html)
 
+| Features      | Description | Status     |
+| :---        |    :----:   |          ---: |
+|Rest query|Perform search over all entity properties.|Done|
+|includeDeleted|Include in the response deleted elements.|Done|
+|includeCount| Returns either page or slice.|Done|
+|patch| Partial update entity||
+
 
 ## Filtering Syntax
+
 * [spring-filter](https://github.com/turkraft/spring-filter)
+
 ### Fields
-Field names should be directly given without any extra literals. Dots indicate nested fields. For example: `category.updatedAt`
+
+Field names should be directly given without any extra literals. Dots indicate nested fields. For
+example: `category.updatedAt`
 
 ### Inputs
-Numbers should be directly given. Booleans should also directly be given, valid values are `true` and `false` (case insensitive). Others such as strings, enums, dates, should be quoted. For example: `status : 'active'`
+
+Numbers should be directly given. Booleans should also directly be given, valid values are `true` and `false` (case
+insensitive). Others such as strings, enums, dates, should be quoted. For example: `status : 'active'`
 
 ### Operators
+
 <table>
   <tr> <th>Literal (case insensitive)</th> <th>Description</th> <th>Example</th> </tr>
   <tr> <td>and</td> <td>and's two expressions</td> <td>status : 'active' <b>and</b> createdAt > '1-1-2000'</td> </tr>
@@ -24,6 +38,7 @@ Numbers should be directly given. Booleans should also directly be given, valid 
 > You may prioritize operators using parentheses, for example: `x and (y or z)`
 
 ### Comparators
+
 <table>
   <tr> <th>Literal (case insensitive)</th> <th>Description</th> <th>Example</th> </tr>
   <tr> <td>~</td> <td>checks if the left (string) expression is similar to the right (string) expression</td> <td>catalog.name <b>~</b> 'electronic%'</td> </tr>
@@ -43,7 +58,9 @@ Numbers should be directly given. Booleans should also directly be given, valid 
 > Note that the `*` character can also be used instead of `%` when using the `~` comparator
 
 ### Functions
-A function is characterized by its name (case insensitive) followed by parentheses. For example: `currentTime()`. Some functions might also take arguments, arguments are seperated with commas. For example: `min(ratings) > 3`
+
+A function is characterized by its name (case insensitive) followed by parentheses. For example: `currentTime()`. Some
+functions might also take arguments, arguments are seperated with commas. For example: `min(ratings) > 3`
 <table>
   <tr> <th>Name</th> <th>Description</th> <th>Example</th> </tr>
   <tr> <td> absolute </td> <td> returns the absolute </td> <td> <b>absolute(</b>x<b>)</b> </td> </tr>
