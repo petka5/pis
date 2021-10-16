@@ -3,15 +3,15 @@ spring:
   application:
     name: PetkaInfra
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/test}
-    username: ${DATASOURCE_USERNAME:root}
-    password: ${DATASOURCE_PASSWORD:petka}
+    driver-class-name: org.postgresql.Driver
+    url: ${DATASOURCE_URL:jdbc:postgresql://concourse-db:5432/test}
+    username: ${DATASOURCE_USERNAME:concourse_user}
+    password: ${DATASOURCE_PASSWORD:concourse_pass}
   jackson:
     mapper:
       accept-case-insensitive-enums: true
   jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: create
 

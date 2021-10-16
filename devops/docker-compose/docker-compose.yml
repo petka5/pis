@@ -14,27 +14,19 @@ services:
       - DATASOURCE_USERNAME=root
       - DATASOURCE_PASSWORD=petka
     depends_on:
-      - pis_db
-  pis_db:
-    image: mariadb:10.5.9
-    container_name: pis_db
-    healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      timeout: 10s
-      retries: 10
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=petka
-      - MYSQL_USER=petka
-      - MYSQL_PASSWORD=petka
-      - MYSQL_DATABASE=test
+      - concourse-db
+
 
   concourse-db:
     container_name: concourse-db
     image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pg-init-scripts:/docker-entrypoint-initdb.d
     environment:
-      POSTGRES_DB: concourse
+      #POSTGRES_DB: concourse
+      POSTGRES_MULTIPLE_DATABASES: concourse,test
       POSTGRES_PASSWORD: concourse_pass
       POSTGRES_USER: concourse_user
       PGDATA: /database
