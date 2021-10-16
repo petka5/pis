@@ -10,6 +10,9 @@ services:
     environment:
       - SERVER_PORT=8080
       - JVM_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:9000
+      - DATASOURCE_URL=jdbc:mysql://pis_db:3306/test
+      - DATASOURCE_USERNAME=root
+      - DATASOURCE_PASSWORD=petka
     depends_on:
       - pis_db
   pis_db:

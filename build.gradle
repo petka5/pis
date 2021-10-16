@@ -9,16 +9,16 @@ ext {
     springBootVersion = '2.5.5'
     springDependencyManagementVersion = '1.0.11.RELEASE'
     spotBugsVersion = '5.0.0-beta.2'
-    spotBugsAnnotationsVersion = "4.4.1"
+    spotBugsAnnotationsVersion = "4.4.2"
     openApiGeneratorVersion = '5.2.0'
     springfoxSwaggeVersion = "2.9.2"
     springCloudSleuthVersion = "3.0.4"
     jacksonDatabindNullableVersion = "0.2.1"
     modelMapperVersion = "2.4.4"
     gitPropertiesVersion = "2.3.1"
-    springFilterVersion = "1.1.0"
+    springFilterVersion = "2.0.1"
     hibernateValidatorVersion = "7.0.1.Final"
-    lombokVersion = "1.18.20"
+    lombokVersion = "1.18.22"
 }
 
 subprojects {
