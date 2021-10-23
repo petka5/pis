@@ -64,6 +64,12 @@ public class BaseService<T extends BaseEntity> {
         return this.findById(id).map(this::deleteById);
     }
 
+    /**
+     * Update entity.
+     *
+     * @param entity
+     * @return entity
+     */
     public T update(final T entity) {
         return repository.save(entity);
     }

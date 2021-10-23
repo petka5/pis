@@ -1,9 +1,11 @@
 package org.petka.pis.delegators;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.petka.pis.api.PetsApiDelegate;
+import org.petka.pis.components.PatchComponent;
 import org.petka.pis.components.SpecificationComponent;
 import org.petka.pis.model.PetPageResponse;
 import org.petka.pis.model.PetRequest;
@@ -28,14 +30,18 @@ public class PetsDelegator implements PetsApiDelegate {
     private final PetService petService;
     private final SpecificationComponent specificationComponent;
     private final ModelMapper modelMapper;
+    private final PatchComponent patchComponent;
 
 
     @Override
     public ResponseEntity<PetResponse> addPet(final PetRequest pet) {
         log.info("Creating pet");
-        return new ResponseEntity<>(
-                modelMapper.map(petService.create(modelMapper.map(pet, Pet.class)), PetResponse.class),
-                HttpStatus.CREATED);
+
+        return Optional.of(modelMapper.map(pet, Pet.class))
+                .map(petService::create)
+                .map(e -> modelMapper.map(e, PetResponse.class))
+                .map(e -> new ResponseEntity<>(e, HttpStatus.CREATED))
+                .orElseGet(ResponseEntity.internalServerError()::build);
     }
 
 
@@ -46,21 +52,21 @@ public class PetsDelegator implements PetsApiDelegate {
                                                     final @DefaultValue("false") Boolean includeCount) {
         log.info("Getting all pets");
 
-        PetPageResponse response =
-                modelMapper.map(petService.findAll(specificationComponent.createSpecification(filter),
-                                                   specificationComponent.createPageRequest(page, size, sort),
-                                                   includeDeleted, includeCount),
-                                PetPageResponse.class);
-        log.info("Founded pets {}", response.getNumberOfElements());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return Optional.of(petService.findAll(specificationComponent.createSpecification(filter),
+                                              specificationComponent.createPageRequest(page, size, sort),
+                                              includeDeleted, includeCount))
+                .map(e -> modelMapper.map(e, PetPageResponse.class))
+                .map(ResponseEntity::ok)
+                .orElseGet(ResponseEntity.internalServerError()::build);
     }
 
     @Override
     public ResponseEntity<PetResponse> findPetById(final UUID id) {
         log.info("Getting pet {}", id);
-        return petService.findById(id).map(e -> modelMapper.map(e, PetResponse.class))
-                .map(e -> new ResponseEntity<>(e, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return petService.findById(id)
+                .map(e -> modelMapper.map(e, PetResponse.class))
+                .map(ResponseEntity::ok)
+                .orElseGet(ResponseEntity.notFound()::build);
     }
 
     @Override
@@ -68,6 +74,17 @@ public class PetsDelegator implements PetsApiDelegate {
         log.info("Deleting pet {}", id);
         return petService.deleteById(id)
                 .map(e -> new ResponseEntity<Void>(HttpStatus.NO_CONTENT))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseGet(ResponseEntity.notFound()::build);
+    }
+
+    @Override
+    public ResponseEntity<PetResponse> updatePet(final UUID id, final Object body) {
+        log.info("Updating pet {}", id);
+        return petService.findById(id)
+                .map(e -> patchComponent.patch(e, body))
+                .map(petService::update)
+                .map(e -> modelMapper.map(e, PetResponse.class))
+                .map(ResponseEntity::ok)
+                .orElseGet(ResponseEntity.notFound()::build);
     }
 }

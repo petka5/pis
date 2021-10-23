@@ -16,7 +16,8 @@ ext {
     jacksonDatabindNullableVersion = "0.2.1"
     modelMapperVersion = "2.4.4"
     gitPropertiesVersion = "2.3.1"
-    springFilterVersion = "2.0.1"
+    springFilterVersion = "2.0.2"
+    jacksonDatabindVersion = "2.13.0"
     hibernateValidatorVersion = "7.0.1.Final"
     lombokVersion = "1.18.22"
 }

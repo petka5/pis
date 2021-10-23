@@ -59,7 +59,7 @@ paths:
               $ref: '#/components/schemas/PetRequest'
         required: true
       responses:
-        200:
+        201:
           description: pet response
           content:
             application/json:
@@ -105,6 +105,33 @@ paths:
         204:
           description: pet deleted
           content: { }
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+    patch:
+      tags:
+        - pets
+      description: Partial update of the pet based on the ID supplied
+      operationId: updatePet
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        description: Pet elements that will be updated
+        content:
+          application/json:
+            schema:
+              type: object
+        required: true
+      responses:
+        200:
+          description: pet response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
         default:
           description: unexpected error
           content:
