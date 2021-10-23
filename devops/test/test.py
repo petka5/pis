@@ -14,7 +14,8 @@ def main():
     logger.debug("Hello World!")
     post()
     get()
-    getAll()
+    get_all()
+    patch()
     delete()
 
 
@@ -31,9 +32,14 @@ def get():
     logger.debug("GET: " + str(response.status_code) + str(response.json()))
 
 
-def getAll():
+def get_all():
     response = requests.get(api_url)
     logger.debug("GET ALL: " + str(response.status_code))
+
+
+def patch():
+    response = requests.patch(api_url + "/" + id, json={"age": 12})
+    logger.debug("PATCH: " + str(response.status_code) + str(response.json()))
 
 
 def delete():
