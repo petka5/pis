@@ -14,7 +14,7 @@ import com.turkraft.springfilter.boot.FilterSpecification;
  * SpecificationComponent.
  */
 @Component
-public final class SpecificationComponent {
+public class SpecificationComponent {
 
     /**
      * Creates specification from the filter param.
