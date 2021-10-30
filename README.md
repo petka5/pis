@@ -3,13 +3,27 @@
 ### Swagger
 
 * [Swagger UI](http://localhost:8080/swagger-ui.html)
+* [concourse](http://localhost:8081/)
+  * username/password - petka/petka
+* [actuator](http://localhost:8080/actuator/)
+* [chaos-monkey](http://localhost:8080/actuator/chaosmonkey)
+
+
+* Build test image  
+from **devops/test** run   
+`./build_image.sh`
+* Upload concourse task   
+from **devops/concourse** run   
+`./upload_tasks.sh`
 
 | Features      | Description | Status     |
 | :---        |    :----:   |          ---: |
+|Api First|Generate SDK and server stub from api yaml.|Done|
 |Rest query|Perform search over all entity properties.|Done|
 |includeDeleted|Include in the response deleted elements.|Done|
 |includeCount| Returns either page or slice.|Done|
-|patch| Partial update entity||
+|patch| Partial update entity|Done|
+|chaos-monkey| Chaos engineering |Done|
 
 
 ## Filtering Syntax

@@ -35,6 +35,7 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonDatabindVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
 
+    implementation "de.codecentric:chaos-monkey-spring-boot:${chaosMonkeyVersion}"
 
     implementation 'mysql:mysql-connector-java'
     implementation "io.springfox:springfox-swagger2:${springfoxSwaggeVersion}"
