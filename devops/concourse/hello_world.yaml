@@ -1,10 +1,12 @@
 resources:
   - name: every_minute
     type: time
+    icon: clock-outline
     source: { interval: 1m }
 
 jobs:
-  - name: hello-world-job
+  - name: chaos_monkey_test
+    serial: true
     plan:
       - get: every_minute
         trigger: true

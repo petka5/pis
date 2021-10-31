@@ -1,14 +1,18 @@
 package org.petka.pis.components;
 
+import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +28,8 @@ public class PatchComponent {
 
     private final ObjectMapper objectMapper;
 
-    private final List<String> fieldToBeOmittedOnUpdate;
+    @Qualifier("nonPatchableFields")
+    private final List<String> nonPatchableFields;
 
     /**
      * Patch entity.
@@ -34,13 +39,21 @@ public class PatchComponent {
      * @param <T>    type of the patched element
      * @return patched entity
      */
-    @SneakyThrows
+    @SneakyThrows(IOException.class)
     public <T> T patch(final T entity, final Object patch) {
-        ObjectReader objectReader = objectMapper.readerForUpdating(entity);
         JsonNode jsonNode = objectMapper.convertValue(patch, JsonNode.class);
 
-        Optional.ofNullable(fieldToBeOmittedOnUpdate).ifPresent(((ObjectNode) jsonNode)::remove);
+        List<String> fieldsList = Optional.ofNullable(nonPatchableFields)
+                .stream().flatMap(Collection::stream)
+                .filter(jsonNode::has)
+                .toList();
 
+        if (Objects.nonNull(fieldsList) && !CollectionUtils.isEmpty(fieldsList)) {
+            throw new IllegalArgumentException(
+                    "Cannot update fields: " + String.join(",", fieldsList));
+        }
+
+        ObjectReader objectReader = objectMapper.readerForUpdating(entity);
         return objectReader.readValue(jsonNode);
     }
 }

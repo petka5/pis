@@ -43,7 +43,7 @@ public class AppConfiguration {
      * @return list of the fields
      */
     @Bean
-    public List<String> fieldToBeOmittedOnUpdate() {
+    public List<String> nonPatchableFields() {
 
         return List.of(Arrays.stream(BaseEntity.class.getDeclaredFields())
                                .map(Field::getName).toArray(String[]::new));
