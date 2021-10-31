@@ -30,17 +30,23 @@ public class Pet extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Type type;
+
+    public enum Type {
+        DOMESTIC("Domestic"), WILD("Wild");
+        private final String value;
+
+        Type(final String value) {
+            this.value = value;
+        }
+
+        /**
+         * Get the type of the Pet.
+         *
+         * @return the type
+         */
+        public String getValue() {
+            return value;
+        }
+    }
 }
 
-enum Type {
-    DOMESTIC("Domestic"), WILD("Wild");
-    private final String value;
-
-    Type(final String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
-}
