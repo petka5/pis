@@ -14,6 +14,19 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: create
+  web:
+    resources:
+      static-locations: classpath:/api
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
 
 management:
   endpoint:
@@ -46,3 +59,10 @@ turkraft:
   springfilter:
     offsetdatetimeformatter:
       pattern: yyyy-MM-dd'T'HH:mm:ssXXX
+
+keycloak:
+  auth-server-url: ${KEYCLOAK_SERVER:http://localhost:8082/auth}
+  realm: ${KEYCLOAK_REALM:petka_realm}
+  resource: petka_client
+  public-client: true
+  principal-attribute: preferred_username

@@ -14,12 +14,14 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
+@AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
 public class BaseEntity {

@@ -11,15 +11,22 @@ openApiGenerate {
     outputDir = "$buildDir".toString()
     apiPackage = "${group}.${rootProject.name}.api"
     modelPackage = "${group}.${rootProject.name}.model"
+    //https://github.com/OpenAPITools/openapi-generator/pull/10581
     modelFilesConstrainedTo = []
     configOptions = [
             delegatePattern: "true",
-            dateLibrary: "java11"
+            dateLibrary    : "java11"
     ]
 }
 
+// Delete swagger2 files
+task deleteFiles(type: Delete) {
+    delete "${buildDir}/src/main/java/org/openapitools"
+}
+
 // Generate code from swagger before compiling this project
-compileJava.dependsOn tasks.openApiGenerate
+compileJava.dependsOn tasks.deleteFiles
+deleteFiles.dependsOn tasks.openApiGenerate
 // Add generated code as additional source code directory for this project
 sourceSets.main.java.srcDirs += "${buildDir}/src/main/java"
 bootJar {

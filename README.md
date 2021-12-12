@@ -2,7 +2,7 @@
 
 ### Swagger
 
-* [Swagger UI](http://localhost:8080/swagger-ui.html)
+* [Swagger UI](http://localhost:8080/swagger-ui/index.html?url=/api.yaml)
 * [concourse](http://localhost:8081/)
   * username/password - petka/petka
 * [actuator](http://localhost:8080/actuator/)

@@ -8,12 +8,12 @@ services:
       - "8080:8080"
       - "9000:9000"
     environment:
-      - SERVER_PORT=8080
-      - SPRING_PROFILES_ACTIVE=chaos-monkey
-      - JVM_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:9000
-      - DATASOURCE_URL=jdbc:mysql://pis_db:3306/test
-      - DATASOURCE_USERNAME=root
-      - DATASOURCE_PASSWORD=petka
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: chaos-monkey
+      JVM_OPTS: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:9000
+      DATASOURCE_URL: jdbc:mysql://pis_db:3306/test
+      DATASOURCE_USERNAME: root
+      DATASOURCE_PASSWORD: petka
     depends_on:
       - pis_db
   pis_db:
@@ -26,16 +26,18 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=petka
-      - MYSQL_USER=petka
-      - MYSQL_PASSWORD=petka
-      - MYSQL_DATABASE=test
+      MYSQL_ROOT_PASSWORD: petka
+      MYSQL_USER: petka
+      MYSQL_PASSWORD: petka
+      MYSQL_DATABASE: test
 
   concourse-db:
     container_name: concourse-db
     image: postgres
+    volumes:
+      - ./pg-init-scripts:/docker-entrypoint-initdb.d
     environment:
-      POSTGRES_DB: concourse
+      POSTGRES_MULTIPLE_DATABASES: concourse, bitnami_keycloak
       POSTGRES_PASSWORD: concourse_pass
       POSTGRES_USER: concourse_user
       PGDATA: /database
@@ -77,3 +79,18 @@ services:
     restart: always
     ports:
       - "5000:5000"
+
+  keycloak:
+    container_name: keycloak
+    image: bitnami/keycloak
+    ports:
+      - "8082:8080"
+    environment:
+      KEYCLOAK_HTTP_PORT: 9990
+      KEYCLOAK_ADMIN_USER: petka
+      KEYCLOAK_ADMIN_PASSWORD: petka
+      KEYCLOAK_MANAGEMENT_USER: petka
+      KEYCLOAK_MANAGEMENT_PASSWORD: petka
+      KEYCLOAK_DATABASE_HOST: concourse-db
+      KEYCLOAK_DATABASE_USER: concourse_user
+      KEYCLOAK_DATABASE_PASSWORD: concourse_pass

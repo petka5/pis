@@ -5,3 +5,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+
+keycloak:
+  auth-server-url: ${KEYCLOAK_SERVER:http://localhost:8082/auth}
+  realm: ${KEYCLOAK_REALM:petka_realm}
+  resource: petka_client
+  public-client: true
+  principal-attribute: preferred_username

@@ -24,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -39,21 +40,18 @@ class PetsControllerTest {
     private PetService petService;
 
     @Test
+    @WithMockUser(roles = {"test-role"})
     void getPetById() throws Exception {
         UUID id = UUID.randomUUID();
         OffsetDateTime createdUpdated = OffsetDateTime.now();
-        Pet pet = Pet.builder().name("name").kind("kind").age(1)
-                .id(id).deleted(false).version(1)
+        Pet pet = Pet.builder().name("name").kind("kind").age(1).id(id).deleted(false).version(1)
                 .createDateTime(createdUpdated).updateDateTime(createdUpdated).build();
 
         doReturn(Optional.of(pet)).when(petService).findById(id);
-        mockMvc.perform(get("/pets/{id}", id.toString()))
-                .andExpect(status().isOk())
+        mockMvc.perform(get("/pets/{id}", id.toString())).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(id.toString())))
-                .andExpect(jsonPath("$.name", is(pet.getName())))
-                .andExpect(jsonPath("$.kind", is(pet.getKind())))
-                .andExpect(jsonPath("$.age", is(pet.getAge())))
+                .andExpect(jsonPath("$.id", is(id.toString()))).andExpect(jsonPath("$.name", is(pet.getName())))
+                .andExpect(jsonPath("$.kind", is(pet.getKind()))).andExpect(jsonPath("$.age", is(pet.getAge())))
                 .andExpect(jsonPath("$.version", is(pet.getVersion()), Long.class))
                 .andExpect(jsonPath("$.createDateTime", is(pet.getCreateDateTime().toString())))
                 .andExpect(jsonPath("$.updateDateTime", is(pet.getUpdateDateTime().toString())))
@@ -61,23 +59,22 @@ class PetsControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"test-role"})
     void getPetByIdNotFound() throws Exception {
         UUID id = UUID.randomUUID();
         doReturn(Optional.empty()).when(petService).findById(id);
-        mockMvc.perform(get("/pets/{id}", id.toString()))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/pets/{id}", id.toString())).andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser(roles = {"test-role"})
     void testGetPets() throws Exception {
         UUID id = UUID.randomUUID();
         OffsetDateTime createdUpdated = OffsetDateTime.now();
-        Pet pet = Pet.builder().name("name").kind("kind").age(1)
-                .id(id).deleted(false).version(1)
+        Pet pet = Pet.builder().name("name").kind("kind").age(1).id(id).deleted(false).version(1)
                 .createDateTime(createdUpdated).updateDateTime(createdUpdated).build();
 
         doReturn(new PageImpl<>(List.of(pet))).when(petService).findAll(any(), any(), anyBoolean(), anyBoolean());
-        this.mockMvc.perform(get("/pets"))
-                .andExpect(status().is2xxSuccessful());
+        this.mockMvc.perform(get("/pets")).andExpect(status().is2xxSuccessful());
     }
 }

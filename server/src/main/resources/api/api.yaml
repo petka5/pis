@@ -14,7 +14,7 @@ info:
 servers:
   - url: http://localhost:8080/
 security:
-  - ApiKeyAuth: [ ]
+  - bearerAuth: [ ]
 tags:
   - name: pets
     description: Operations over the pets.
@@ -141,10 +141,10 @@ paths:
     x-api-first-handler: admin.Dashboard.pathLevel
 components:
   securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: api-key
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   parameters:
     id:
       name: id
