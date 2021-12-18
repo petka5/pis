@@ -1,20 +1,26 @@
 # Getting Started
 
-### Swagger
+### Endpoints
 
 * [Swagger UI](http://localhost:8080/swagger-ui/index.html?url=/api.yaml)
 * [concourse](http://localhost:8081/)
-  * username/password - petka/petka
+    * username/password - petka/petka
+* [keycloak](http://localhost:8082/)
+    * username/password - petka/petka
 * [actuator](http://localhost:8080/actuator/)
 * [chaos-monkey](http://localhost:8080/actuator/chaosmonkey)
 
+### Configuration
 
+* Configure keycloak server (create realm, client and user)   
+  from **devops/keycloak/** run   
+  `./keycloak.py`
 * Build test image  
-from **devops/test** run   
-`./build_image.sh`
+  from **devops/test** run   
+  `./build_image.sh`
 * Upload concourse task   
-from **devops/concourse** run   
-`./upload_tasks.sh`
+  from **devops/concourse** run   
+  `./upload_tasks.sh`
 
 | Features      | Description | Status     |
 | :---        |    :----:   |          ---: |
@@ -24,7 +30,6 @@ from **devops/concourse** run
 |includeCount| Returns either page or slice.|Done|
 |patch| Partial update entity|Done|
 |chaos-monkey| Chaos engineering |Done|
-
 
 ## Filtering Syntax
 

@@ -11,35 +11,23 @@ services:
       SERVER_PORT: 8080
       SPRING_PROFILES_ACTIVE: chaos-monkey
       JVM_OPTS: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:9000
-      DATASOURCE_URL: jdbc:mysql://pis_db:3306/test
-      DATASOURCE_USERNAME: root
+      DATASOURCE_URL: jdbc:postgresql://postgres:5432/pis
+      DATASOURCE_USERNAME: petka
       DATASOURCE_PASSWORD: petka
     depends_on:
-      - pis_db
-  pis_db:
-    image: mariadb:10.5.9
-    container_name: pis_db
-    healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      timeout: 10s
-      retries: 10
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: petka
-      MYSQL_USER: petka
-      MYSQL_PASSWORD: petka
-      MYSQL_DATABASE: test
+      - postgres
 
-  concourse-db:
-    container_name: concourse-db
+  postgres:
+    container_name: postgres
     image: postgres
     volumes:
       - ./pg-init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
     environment:
-      POSTGRES_MULTIPLE_DATABASES: concourse, bitnami_keycloak
-      POSTGRES_PASSWORD: concourse_pass
-      POSTGRES_USER: concourse_user
+      POSTGRES_MULTIPLE_DATABASES: concourse, bitnami_keycloak, pis
+      POSTGRES_PASSWORD: petka
+      POSTGRES_USER: petka
       PGDATA: /database
 
   concourse:
@@ -47,12 +35,12 @@ services:
     image: concourse/concourse
     command: quickstart
     privileged: true
-    depends_on: [ concourse-db ]
+    depends_on: [ postgres ]
     ports: [ "8081:8080" ]
     environment:
-      CONCOURSE_POSTGRES_HOST: concourse-db
-      CONCOURSE_POSTGRES_USER: concourse_user
-      CONCOURSE_POSTGRES_PASSWORD: concourse_pass
+      CONCOURSE_POSTGRES_HOST: postgres
+      CONCOURSE_POSTGRES_USER: petka
+      CONCOURSE_POSTGRES_PASSWORD: petka
       CONCOURSE_POSTGRES_DATABASE: concourse
       CONCOURSE_EXTERNAL_URL: http://localhost:8081
       CONCOURSE_ADD_LOCAL_USER: petka:petka
@@ -91,6 +79,6 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: petka
       KEYCLOAK_MANAGEMENT_USER: petka
       KEYCLOAK_MANAGEMENT_PASSWORD: petka
-      KEYCLOAK_DATABASE_HOST: concourse-db
-      KEYCLOAK_DATABASE_USER: concourse_user
-      KEYCLOAK_DATABASE_PASSWORD: concourse_pass
+      KEYCLOAK_DATABASE_HOST: postgres
+      KEYCLOAK_DATABASE_USER: petka
+      KEYCLOAK_DATABASE_PASSWORD: petka

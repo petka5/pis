@@ -39,7 +39,7 @@ public class CustomRepositoryImpl<T, K extends Serializable> extends SimpleJpaRe
         if (includeCount) {
             return findAll(querySpec, pageable);
         }
-        return findAllSlice(spec, pageable);
+        return findAllSlice(querySpec, pageable);
     }
 
     private Slice<T> findAllSlice(final Specification<T> spec, final Pageable pageable) {

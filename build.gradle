@@ -6,14 +6,14 @@ allprojects {
 }
 
 ext {
-    springBootVersion = '2.6.0'
+    springBootVersion = '2.6.1'
     springDependencyManagementVersion = '1.0.11.RELEASE'
     spotBugsVersion = '5.0.0-beta.2'
-    spotBugsAnnotationsVersion = "4.5.0"
+    spotBugsAnnotationsVersion = "4.5.2"
     openApiGeneratorVersion = '5.3.0'
     springfoxSwaggeVersion = "3.0.0"
     springCloudSleuthVersion = "3.1.0"
-    jacksonDatabindNullableVersion = "0.2.1"
+    jacksonDatabindNullableVersion = "0.2.2"
     modelMapperVersion = "2.4.4"
     gitPropertiesVersion = "2.3.1"
     springFilterVersion = "2.0.4"

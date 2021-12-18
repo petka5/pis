@@ -37,8 +37,7 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
 
     implementation "de.codecentric:chaos-monkey-spring-boot:${chaosMonkeyVersion}"
-
-    implementation 'mysql:mysql-connector-java'
+    implementation 'org.postgresql:postgresql'
     implementation "org.springdoc:springdoc-openapi-ui:${springdocVersion}"
     implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudSleuthVersion}"
 

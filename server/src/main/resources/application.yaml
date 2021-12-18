@@ -1,17 +1,16 @@
-# MySQL
 spring:
   application:
     name: PetkaInfra
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/test}
-    username: ${DATASOURCE_USERNAME:root}
+    driver-class-name: org.postgresql.Driver
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/pis}
+    username: ${DATASOURCE_USERNAME:petka}
     password: ${DATASOURCE_PASSWORD:petka}
   jackson:
     mapper:
       accept-case-insensitive-enums: true
   jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: create
   web:
@@ -61,7 +60,7 @@ turkraft:
       pattern: yyyy-MM-dd'T'HH:mm:ssXXX
 
 keycloak:
-  auth-server-url: ${KEYCLOAK_SERVER:http://localhost:8082/auth}
+  auth-server-url: ${KEYCLOAK_SERVER:http://host.docker.internal:8082/auth}
   realm: ${KEYCLOAK_REALM:petka_realm}
   resource: petka_client
   public-client: true

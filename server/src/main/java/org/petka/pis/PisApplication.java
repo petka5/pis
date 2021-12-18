@@ -8,7 +8,7 @@ public class PisApplication {
 
     /**
      * Spring boot main class.
-     *
+     * https://stackoverflow.com/questions/25738569/how-to-map-a-map-json-column-to-java-object-with-jpa
      * @param args application arguments.
      */
     public static void main(final String[] args) {

@@ -4,74 +4,78 @@ import json
 
 import requests
 
-access_token = None
+keycloak_url = "http://host.docker.internal:8082"
+keycloak_username = "petka"
+keycloak_password = "petka"
+auth_header = None
+realm_name = "petka_realm"
+client_id = "petka_client"
+client_secret = "petka"
+role = "test-role"
+username = "test-user"
+password = "password"
 
 
 def get_token():
     data = "client_id=petka_client&username=test-user&password=password&grant_type=password&" \
            "client_secret=petka"
 
-    response = requests.post("http://localhost:8082/auth/realms/petka_realm/protocol/openid-connect/token",
+    response = requests.post(f"{keycloak_url}/auth/realms/{realm_name}/protocol/openid-connect/token",
                              headers={"Content-Type": "application/x-www-form-urlencoded"}, data=data)
-    print(response)
+    print(f"get token {response}")
     print(response.json()["access_token"])
 
 
 def create_user():
-    headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json"}
     data = {
-        "username": "test-user",
+        "username": username,
         "lastName": "Petka",
         "firstName": "Petka",
         "email": "petka@petka.com",
         "enabled": "true",
         "credentials": [{
             "type": "password",
-            "value": "password",
+            "value": password,
             "temporary": "false"
         }]
     }
 
-    response = requests.post("http://localhost:8082/auth/admin/realms/petka_realm/users/", headers=headers,
+    response = requests.post(f"{keycloak_url}/auth/admin/realms/{realm_name}/users/", headers=auth_header,
                              data=json.dumps(data))
-    print(response)
+    print(f"create user {response}")
 
-    users = requests.get("http://localhost:8082/auth/admin/realms/petka_realm/users/", headers=headers)
-    user_id = list(filter(lambda d: d['username'] == "test-user", users.json()))[0]["id"]
+    users = requests.get(f"{keycloak_url}/auth/admin/realms/{realm_name}/users/", headers=auth_header)
+    user_id = list(filter(lambda d: d['username'] == username, users.json()))[0]["id"]
 
-    roles = requests.get("http://localhost:8082/auth/admin/realms/petka_realm/roles/", headers=headers)
-    role_id = list(filter(lambda d: d['name'] == "test-role", roles.json()))[0]["id"]
-    mapping = [{"name": "test-role", "id": role_id}]
+    roles = requests.get(f"{keycloak_url}/auth/admin/realms/{realm_name}/roles/", headers=auth_header)
+    role_id = list(filter(lambda d: d['name'] == role, roles.json()))[0]["id"]
+    mapping = [{"name": role, "id": role_id}]
     mapping_response = requests.post(
-        "http://localhost:8082/auth/admin/realms/petka_realm/users/" + user_id + "/role-mappings/realm",
-        headers=headers, data=json.dumps(mapping))
-    print(mapping_response)
+        f"{keycloak_url}/auth/admin/realms/{realm_name}/users/{user_id}/role-mappings/realm",
+        headers=auth_header, data=json.dumps(mapping))
+    print(f"user mapping {mapping_response}")
 
 
 def create_role():
-    headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json"}
-
-    data = {"name": "test-role"}
     response = requests.post(
-        "http://localhost:8082/auth/admin/realms/petka_realm/roles", headers=headers, data=json.dumps(data))
-    print(response)
+        f"{keycloak_url}/auth/admin/realms/{realm_name}/roles",
+        headers=auth_header,
+        data=json.dumps({"name": role}))
+    print(f"create role {response}")
 
 
 def create_client():
-    # add Direct Access Grants Enabled and client_secret
-    headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json"}
-    response = requests.post("http://localhost:8082/auth/admin/realms/petka_realm/clients/",
-                             headers=headers, data=json.dumps(
-            {"clientId": "petka_client", "secret": "petka", "directAccessGrantsEnabled": "true",
-             "redirectUris": ["http://localhost:8082/*"]}))
-    print(response)
+    response = requests.post(f"{keycloak_url}/auth/admin/realms/{realm_name}/clients/",
+                             headers=auth_header, data=json.dumps(
+            {"clientId": client_id, "secret": client_secret, "directAccessGrantsEnabled": "true",
+             "redirectUris": [f"{keycloak_url}/*"]}))
+    print(f"create client {response}")
 
 
 def create_realm():
-    headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json"}
     data = {
         "id": "petka_realm_id",
-        "realm": "petka_realm",
+        "realm": realm_name,
         "displayName": "Petka Realm",
         "enabled": 'true',
         "sslRequired": "external",
@@ -80,19 +84,24 @@ def create_realm():
         "duplicateEmailsAllowed": 'false',
         "resetPasswordAllowed": 'false',
         "editUsernameAllowed": 'false',
-        "bruteForceProtected": 'true'
+        "bruteForceProtected": 'true',
+        "accessTokenLifespan": 1800
     }
-    response = requests.post("http://localhost:8082/auth/admin/realms", headers=headers, data=json.dumps(data))
-    print(response)
+    response = requests.post(f"{keycloak_url}/auth/admin/realms", headers=auth_header,
+                             data=json.dumps(data))
+    print(f"create realm {response}")
 
 
 def login():
-    response = requests.post("http://localhost:8082/auth/realms/master/protocol/openid-connect/token",
-                             headers={"Content-Type": "application/x-www-form-urlencoded"},
-                             data="username=petka&password=petka&grant_type=password&client_id=admin-cli")
-    global access_token
-    access_token = response.json()["access_token"]
-    print(response)
+    response = requests.post(
+        f"{keycloak_url}/auth/realms/master/protocol/openid-connect/token",
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        data=f"username={keycloak_username}&password={keycloak_password}&grant_type=password&client_id=admin-cli")
+
+    global auth_header
+    auth_header = {"Authorization": "Bearer {access_token}".format(access_token=response.json()["access_token"]),
+                   "Content-Type": "application/json"}
+    print(f"login {response}")
 
 
 if __name__ == '__main__':
