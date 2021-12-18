@@ -12,7 +12,7 @@
 
 ### Configuration
 
-* Configure keycloak server (create realm, client and user)   
+* Configure keycloak server (create realm, client and user) and generate auth token.   
   from **devops/keycloak/** run   
   `./keycloak.py`
 * Build test image  

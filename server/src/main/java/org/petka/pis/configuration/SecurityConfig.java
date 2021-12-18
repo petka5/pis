@@ -50,6 +50,6 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         super.configure(http);
         http.csrf().disable().exceptionHandling().authenticationEntryPoint(new Http403ForbiddenEntryPoint());
 
-        http.authorizeRequests().antMatchers("/pets/**", "/pets**").hasRole("test-role").anyRequest().permitAll();
+        http.authorizeRequests().antMatchers("/**").hasRole("test-role").anyRequest().permitAll();
     }
 }

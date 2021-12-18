@@ -2,7 +2,7 @@ resources:
   - name: every_minute
     type: time
     icon: clock-outline
-    source: { interval: 1m }
+    source: { interval: 3m }
 
 jobs:
   - name: chaos_monkey_test

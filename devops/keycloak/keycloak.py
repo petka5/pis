@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import json
-
 import requests
 
 keycloak_url = "http://host.docker.internal:8082"
@@ -17,8 +15,8 @@ password = "password"
 
 
 def get_token():
-    data = "client_id=petka_client&username=test-user&password=password&grant_type=password&" \
-           "client_secret=petka"
+    data = f"client_id={client_id}&username={username}&password={password}&grant_type=password" \
+           f"&client_secret={client_secret}"
 
     response = requests.post(f"{keycloak_url}/auth/realms/{realm_name}/protocol/openid-connect/token",
                              headers={"Content-Type": "application/x-www-form-urlencoded"}, data=data)
@@ -40,8 +38,7 @@ def create_user():
         }]
     }
 
-    response = requests.post(f"{keycloak_url}/auth/admin/realms/{realm_name}/users/", headers=auth_header,
-                             data=json.dumps(data))
+    response = requests.post(f"{keycloak_url}/auth/admin/realms/{realm_name}/users/", headers=auth_header, json=data)
     print(f"create user {response}")
 
     users = requests.get(f"{keycloak_url}/auth/admin/realms/{realm_name}/users/", headers=auth_header)
@@ -52,23 +49,21 @@ def create_user():
     mapping = [{"name": role, "id": role_id}]
     mapping_response = requests.post(
         f"{keycloak_url}/auth/admin/realms/{realm_name}/users/{user_id}/role-mappings/realm",
-        headers=auth_header, data=json.dumps(mapping))
+        headers=auth_header, json=mapping)
     print(f"user mapping {mapping_response}")
 
 
 def create_role():
-    response = requests.post(
-        f"{keycloak_url}/auth/admin/realms/{realm_name}/roles",
-        headers=auth_header,
-        data=json.dumps({"name": role}))
+    response = requests.post(f"{keycloak_url}/auth/admin/realms/{realm_name}/roles", headers=auth_header,
+                             json={"name": role})
     print(f"create role {response}")
 
 
 def create_client():
     response = requests.post(f"{keycloak_url}/auth/admin/realms/{realm_name}/clients/",
-                             headers=auth_header, data=json.dumps(
-            {"clientId": client_id, "secret": client_secret, "directAccessGrantsEnabled": "true",
-             "redirectUris": [f"{keycloak_url}/*"]}))
+                             headers=auth_header,
+                             json={"clientId": client_id, "secret": client_secret, "directAccessGrantsEnabled": "true",
+                                   "redirectUris": [f"{keycloak_url}/*"]})
     print(f"create client {response}")
 
 
@@ -87,8 +82,7 @@ def create_realm():
         "bruteForceProtected": 'true',
         "accessTokenLifespan": 1800
     }
-    response = requests.post(f"{keycloak_url}/auth/admin/realms", headers=auth_header,
-                             data=json.dumps(data))
+    response = requests.post(f"{keycloak_url}/auth/admin/realms", headers=auth_header, json=data)
     print(f"create realm {response}")
 
 
