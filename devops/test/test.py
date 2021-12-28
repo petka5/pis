@@ -88,8 +88,7 @@ def get_token():
                              headers={"Content-Type": "application/x-www-form-urlencoded"}, data=data)
     response.raise_for_status()
     global auth_header
-    access_token = response.json()["access_token"]
-    auth_header = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
+    auth_header = {"Authorization": f"Bearer {response.json()['access_token']}", "Content-Type": "application/json"}
     print(f"get token {response}")
 
 
@@ -106,7 +105,8 @@ if __name__ == "__main__":
         patch()
         delete()
         chaos_monkey_disable()
-    except:
+    except Exception as e:
+        logger.error(e)
         chaos_monkey_disable()
         sys.exit(-1)
     logger.debug("End of the tests")
