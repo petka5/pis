@@ -43,4 +43,17 @@ public interface CustomRepository<T, K extends Serializable> extends JpaReposito
     @NonNull
     @Query("select e from #{#entityName} e where e.id = ?1 and e.deleted = false")
     Optional<T> findById(@NonNull K k);
+
+
+    /**
+     * Selecting entity by id and orgId and takes into account <B>deleted</B> field.
+     *
+     * @param id    primary key
+     * @param orgId orgId
+     * @return entity
+     */
+    @NonNull
+    @Query("select e from #{#entityName} e where e.id = ?1 and e.orgId= ?2 and e.deleted = false")
+    Optional<T> findByIdAndOrgId(@NonNull K id, @NonNull K orgId);
+
 }

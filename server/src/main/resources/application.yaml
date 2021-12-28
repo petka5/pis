@@ -1,3 +1,7 @@
+openapi:
+  petkaInfrastructureProject:
+    base-path: /api
+
 spring:
   application:
     name: PetkaInfra
@@ -26,6 +30,7 @@ logging:
 springdoc:
   swagger-ui:
     disable-swagger-default-url: true
+    url: /api.yaml
 
 management:
   endpoint:

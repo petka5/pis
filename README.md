@@ -2,7 +2,7 @@
 
 ### Endpoints
 
-* [Swagger UI](http://localhost:8080/swagger-ui/index.html?url=/api.yaml)
+* [Swagger UI](http://localhost:8080/swagger-ui/index.html)
 * [concourse](http://localhost:8081/)
     * username/password - petka/petka
 * [keycloak](http://localhost:8082/)
@@ -22,14 +22,15 @@
   from **devops/concourse** run   
   `./upload_tasks.sh`
 
-| Features      | Description | Status     |
-| :---        |    :----:   |          ---: |
-|Api First|Generate SDK and server stub from api yaml.|Done|
-|Rest query|Perform search over all entity properties.|Done|
-|includeDeleted|Include in the response deleted elements.|Done|
-|includeCount| Returns either page or slice.|Done|
-|patch| Partial update entity|Done|
-|chaos-monkey| Chaos engineering |Done|
+| Features         |                 Description                 | Status     |
+|:-----------------|:-------------------------------------------:|          ---: |
+| Api First        | Generate SDK and server stub from api yaml. |Done|
+| Rest query       | Perform search over all entity properties.  |Done|
+| Tenant isolation |        Supports org and operator API        |Done|
+| includeDeleted   |  Include in the response deleted elements.  |Done|
+| includeCount     |        Returns either page or slice.        |Done|
+| patch            |            Partial update entity            |Done|
+| chaos-monkey     |              Chaos engineering              |Done|
 
 ## Filtering Syntax
 

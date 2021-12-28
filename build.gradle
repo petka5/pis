@@ -6,7 +6,7 @@ allprojects {
 }
 
 ext {
-    springBootVersion = '2.6.1'
+    springBootVersion = '2.6.2'
     springDependencyManagementVersion = '1.0.11.RELEASE'
     spotBugsVersion = '5.0.0-beta.2'
     spotBugsAnnotationsVersion = "4.5.2"
@@ -17,12 +17,12 @@ ext {
     modelMapperVersion = "2.4.4"
     gitPropertiesVersion = "2.3.1"
     springFilterVersion = "2.0.4"
-    jacksonDatabindVersion = "2.13.0"
+    jacksonDatabindVersion = "2.13.1"
     hibernateValidatorVersion = "7.0.1.Final"
     lombokVersion = "1.18.22"
     chaosMonkeyVersion = "2.5.4"
     keyCloakVersion = "15.0.2"
-    springdocVersion = "1.5.13"
+    springdocVersion = "1.6.2"
 }
 
 subprojects {

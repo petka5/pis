@@ -2,7 +2,6 @@ openapi: 3.0.3
 info:
   title: Petka Infrastructure Project
   description: Api first project
-  termsOfService: http://helloreverb.com/terms/
   contact:
     name: Petka
     url: https://github.com/petka5/pis
@@ -12,19 +11,21 @@ info:
     url: https://opensource.org/licenses/MIT
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/
+  - url: http://localhost:8080/api
 security:
   - bearerAuth: [ ]
 tags:
-  - name: pets
-    description: Operations over the pets.
+  - name: Organization Pets
+    description: Operations over the organization pets.
+  - name: Operator Pets
+    description: Operations over all pets.
 paths:
-  /pets:
+  /operator/pets:
     get:
       tags:
-        - pets
+        - Operator Pets
       description: Returns all pets from the system that the user has access to
-      operationId: findPets
+      operationId: operatorFindPets
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/size'
@@ -45,18 +46,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorModel'
-      x-api-first-handler: admin.Dashboard.methodLevel
     post:
       tags:
-        - pets
+        - Operator Pets
       description: Creates a new pet in the store.  Duplicates are allowed
-      operationId: addPet
+      operationId: operatorAddPet
       requestBody:
         description: Pet to add to the store
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PetRequest'
+                $ref: '#/components/schemas/OperatorPetRequest'
         required: true
       responses:
         201:
@@ -71,14 +71,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorModel'
-      x-api-first-handler: admin.Dashboard.postHandler
-      x-codegen-request-body-name: pet
-  /pets/{id}:
+  /operator/pets/{id}:
     get:
       tags:
-        - pets
+        - Operator Pets
       description: Returns resource by the id
-      operationId: findPetById
+      operationId: operatorFindPetById
       parameters:
         - $ref: '#/components/parameters/id'
       responses:
@@ -96,9 +94,9 @@ paths:
                 $ref: '#/components/schemas/errorModel'
     delete:
       tags:
-        - pets
+        - Operator Pets
       description: deletes a single pet based on the ID supplied
-      operationId: deletePet
+      operationId: operatorDeletePet
       parameters:
         - $ref: '#/components/parameters/id'
       responses:
@@ -113,9 +111,9 @@ paths:
                 $ref: '#/components/schemas/errorModel'
     patch:
       tags:
-        - pets
+        - Operator Pets
       description: Partial update of the pet based on the ID supplied
-      operationId: updatePet
+      operationId: operatorUpdatePet
       parameters:
         - $ref: '#/components/parameters/id'
       requestBody:
@@ -138,7 +136,128 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorModel'
-    x-api-first-handler: admin.Dashboard.pathLevel
+  /{orgId}/pets:
+    get:
+      tags:
+        - Organization Pets
+      description: Returns all pets from the system that the user has access to
+      operationId: orgFindPets
+      parameters:
+        - $ref: '#/components/parameters/orgId'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/includeDeleted'
+        - $ref: '#/components/parameters/includeCount'
+      responses:
+        200:
+          description: pet response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetPageResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+    post:
+      tags:
+        - Organization Pets
+      description: Creates a new pet in the store.  Duplicates are allowed
+      operationId: orgAddPet
+      parameters:
+        - $ref: '#/components/parameters/orgId'
+      requestBody:
+        description: Pet to add to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetRequest'
+        required: true
+      responses:
+        201:
+          description: pet response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+  /{orgId}/pets/{id}:
+    get:
+      tags:
+        - Organization Pets
+      description: Returns resource by the id
+      operationId: orgFindPetById
+      parameters:
+        - $ref: '#/components/parameters/orgId'
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          description: pet response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+    delete:
+      tags:
+        - Organization Pets
+      description: deletes a single pet based on the ID supplied
+      operationId: orgDeletePet
+      parameters:
+        - $ref: '#/components/parameters/orgId'
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: pet deleted
+          content: { }
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+    patch:
+      tags:
+        - Organization Pets
+      description: Partial update of the pet based on the ID supplied
+      operationId: orgUpdatePet
+      parameters:
+        - $ref: '#/components/parameters/orgId'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        description: Pet elements that will be updated
+        content:
+          application/json:
+            schema:
+              type: object
+        required: true
+      responses:
+        200:
+          description: pet response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
 components:
   securitySchemes:
     bearerAuth:
@@ -204,7 +323,25 @@ components:
       allowEmptyValue: true
       schema:
         type: string
+    orgId:
+      name: orgId
+      in: path
+      description: Org ID
+      required: true
+      schema:
+        example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        type: string
+        format: uuid
   schemas:
+    OperatorPetRequest:
+      required:
+        - orgId
+      allOf:
+        - $ref: '#/components/schemas/PetRequest'
+      properties:
+        orgId:
+          type: string
+          format: uuid
     PetRequest:
       required:
         - name
@@ -226,6 +363,9 @@ components:
       type: object
       properties:
         id:
+          type: string
+          format: uuid
+        orgId:
           type: string
           format: uuid
         name:

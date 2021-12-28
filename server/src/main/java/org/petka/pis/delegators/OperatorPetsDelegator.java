@@ -4,11 +4,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
-import org.petka.pis.api.PetsApiDelegate;
+import org.petka.pis.api.OperatorApiDelegate;
 import org.petka.pis.components.PatchComponent;
 import org.petka.pis.components.SpecificationComponent;
+import org.petka.pis.model.OperatorPetRequest;
 import org.petka.pis.model.PetPageResponse;
-import org.petka.pis.model.PetRequest;
 import org.petka.pis.model.PetResponse;
 import org.petka.pis.persistence.entities.Pet;
 import org.petka.pis.services.PetService;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP2"}, justification = "Model mapper could be changed.")
-public class PetsDelegator implements PetsApiDelegate {
+public class OperatorPetsDelegator implements OperatorApiDelegate {
 
     private final PetService petService;
     private final SpecificationComponent specificationComponent;
@@ -34,7 +34,7 @@ public class PetsDelegator implements PetsApiDelegate {
 
 
     @Override
-    public ResponseEntity<PetResponse> addPet(final PetRequest pet) {
+    public ResponseEntity<PetResponse> operatorAddPet(final OperatorPetRequest pet) {
         log.info("Creating pet");
 
         return Optional.of(modelMapper.map(pet, Pet.class))
@@ -46,10 +46,10 @@ public class PetsDelegator implements PetsApiDelegate {
 
 
     @Override
-    public ResponseEntity<PetPageResponse> findPets(final Integer page, final Integer size, final String sort,
-                                                    final String filter,
-                                                    final @DefaultValue("false") Boolean includeDeleted,
-                                                    final @DefaultValue("false") Boolean includeCount) {
+    public ResponseEntity<PetPageResponse> operatorFindPets(final Integer page, final Integer size, final String sort,
+                                                            final String filter,
+                                                            final @DefaultValue("false") Boolean includeDeleted,
+                                                            final @DefaultValue("false") Boolean includeCount) {
         log.info("Getting all pets");
 
         return Optional.of(petService.findAll(specificationComponent.createSpecification(filter),
@@ -61,7 +61,7 @@ public class PetsDelegator implements PetsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<PetResponse> findPetById(final UUID id) {
+    public ResponseEntity<PetResponse> operatorFindPetById(final UUID id) {
         log.info("Getting pet {}", id);
         return petService.findById(id)
                 .map(e -> modelMapper.map(e, PetResponse.class))
@@ -70,7 +70,7 @@ public class PetsDelegator implements PetsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Void> deletePet(final UUID id) {
+    public ResponseEntity<Void> operatorDeletePet(final UUID id) {
         log.info("Deleting pet {}", id);
         return petService.deleteById(id)
                 .map(e -> new ResponseEntity<Void>(HttpStatus.NO_CONTENT))
@@ -78,7 +78,7 @@ public class PetsDelegator implements PetsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<PetResponse> updatePet(final UUID id, final Object body) {
+    public ResponseEntity<PetResponse> operatorUpdatePet(final UUID id, final Object body) {
         log.info("Updating pet {}", id);
         return petService.findById(id)
                 .map(e -> patchComponent.patch(e, body))

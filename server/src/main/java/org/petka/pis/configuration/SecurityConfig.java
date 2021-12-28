@@ -48,8 +48,12 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         super.configure(http);
+        http.servletApi().rolePrefix("");
         http.csrf().disable().exceptionHandling().authenticationEntryPoint(new Http403ForbiddenEntryPoint());
 
-        http.authorizeRequests().antMatchers("/**").hasRole("test-role").anyRequest().permitAll();
+        http.authorizeRequests().antMatchers("/api.yaml").permitAll()
+                .antMatchers("/api/operator/**", "/api/operator**").hasAnyRole(Role.OPERATOR.getName())
+                .antMatchers("/api/**", "/api**").hasAnyRole(Role.ORGANIZATION.getName(), Role.OPERATOR.getName())
+                .anyRequest().permitAll();
     }
 }

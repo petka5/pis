@@ -3,14 +3,18 @@ package org.petka.pis.services;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.petka.pis.persistence.entities.BaseEntity;
 import org.petka.pis.persistence.repositories.CustomRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Service
+@Validated
 public class BaseService<T extends BaseEntity> {
 
     private final CustomRepository<T, UUID> repository;
@@ -39,7 +43,7 @@ public class BaseService<T extends BaseEntity> {
      * @param entity new entity.
      * @return stored entity.
      */
-    public T create(final T entity) {
+    public T create(final @Valid T entity) {
         return repository.save(entity);
     }
 
@@ -55,6 +59,17 @@ public class BaseService<T extends BaseEntity> {
     }
 
     /**
+     * Find entity by id and orgId.
+     *
+     * @param id    id
+     * @param orgId orgId
+     * @return entity
+     */
+    public Optional<T> findByIdAndOrgId(final UUID id, final UUID orgId) {
+        return repository.findByIdAndOrgId(id, orgId);
+    }
+
+    /**
      * Delete entity by id.
      *
      * @param id id
@@ -65,12 +80,23 @@ public class BaseService<T extends BaseEntity> {
     }
 
     /**
-     * Update entity.
+     * Delete entity by id and orgId.
      *
-     * @param entity
+     * @param id    id
+     * @param orgId orgId
      * @return entity
      */
-    public T update(final T entity) {
+    public Optional<T> deleteByIdAndOrgId(final UUID id, final UUID orgId) {
+        return this.findByIdAndOrgId(id, orgId).map(this::deleteById);
+    }
+
+    /**
+     * Update entity.
+     *
+     * @param entity entity to be saved.
+     * @return entity
+     */
+    public T update(final @Valid T entity) {
         return repository.save(entity);
     }
 

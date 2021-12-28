@@ -1,3 +1,7 @@
+openapi:
+  petkaInfrastructureProject:
+    base-path: /api
+
 spring:
   datasource:
     url: jdbc:h2:mem:test

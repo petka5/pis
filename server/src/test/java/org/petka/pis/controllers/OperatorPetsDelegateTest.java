@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.petka.pis.components.PatchComponent;
-import org.petka.pis.delegators.PetsDelegator;
+import org.petka.pis.delegators.OperatorPetsDelegator;
 import org.petka.pis.model.PetResponse;
 import org.petka.pis.persistence.entities.Pet;
 import org.petka.pis.services.PetService;
@@ -30,10 +30,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 
 @ExtendWith(MockitoExtension.class)
-class PetsDelegateTest {
+class OperatorPetsDelegateTest {
 
     @InjectMocks
-    private PetsDelegator petsDelegator;
+    private OperatorPetsDelegator operatorPetsDelegator;
     @Mock
     private PetService petService;
     @Mock
@@ -53,7 +53,7 @@ class PetsDelegateTest {
         when(modelMapper.map(any(), any())).thenReturn(new PetResponse());
 
         ResponseEntity<PetResponse> response =
-                petsDelegator.updatePet(UUID.randomUUID(), mapper.readTree("{\"age\":12}"));
+                operatorPetsDelegator.operatorUpdatePet(UUID.randomUUID(), mapper.readTree("{\"age\":12}"));
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());

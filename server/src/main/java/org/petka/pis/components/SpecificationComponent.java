@@ -1,6 +1,8 @@
 package org.petka.pis.components;
 
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,21 +21,33 @@ public class SpecificationComponent {
     /**
      * Creates specification from the filter param.
      *
-     * @param filter filter request parameter
      * @param <T>    entity type
+     * @param filter filter request parameter
      * @return Specification
      */
     public <T> Specification<T> createSpecification(final String filter) {
 
-        if (Objects.nonNull(filter)) {
-            return new FilterSpecification<>(filter);
-        }
-
-        return Specification.where(null);
+        return Optional.ofNullable(filter).map(FilterSpecification<T>::new).map(Specification.class::cast)
+                .orElse(Specification.where(null));
     }
 
     /**
-     * Creates pageble from the request parameters.
+     * Creates organization specification from the filter param.
+     *
+     * @param filter request filter
+     * @param orgId  org id
+     * @param <T>    entity type
+     * @return Specification
+     */
+    public <T> Specification<T> createSpecification(final String filter, final UUID orgId) {
+        return new FilterSpecification<>(
+                Optional.ofNullable(filter).map("orgId:'" .concat(orgId.toString()).concat("' and ")::concat)
+                        .orElse("orgId:'" .concat(orgId.toString()).concat("'")));
+    }
+
+
+    /**
+     * Creates pageable from the request parameters.
      *
      * @param page page number
      * @param size page size
