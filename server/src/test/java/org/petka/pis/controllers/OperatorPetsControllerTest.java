@@ -1,6 +1,7 @@
 package org.petka.pis.controllers;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.doReturn;
@@ -46,14 +47,18 @@ class OperatorPetsControllerTest {
 
         OffsetDateTime createdUpdated = OffsetDateTime.now();
         Pet pet = Pet.builder().name("name").kind("kind").age(1).id(UUID.randomUUID()).orgId(UUID.randomUUID())
-                .deleted(false).version(1).createDateTime(createdUpdated).updateDateTime(createdUpdated).build();
+                .createdBy("petka").lastModifiedBy("petka").deleted(false).version(1).createDateTime(createdUpdated)
+                .updateDateTime(createdUpdated).build();
 
         doReturn(Optional.of(pet)).when(petService).findById(pet.getId());
         mockMvc.perform(get(Paths.OPERATOR_PETS_ID, pet.getId().toString())).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(pet.getId().toString())))
                 .andExpect(jsonPath("$.orgId", is(pet.getOrgId().toString())))
-                .andExpect(jsonPath("$.name", is(pet.getName()))).andExpect(jsonPath("$.kind", is(pet.getKind())))
+                .andExpect(jsonPath("$.name", is(pet.getName())))
+                .andExpect(jsonPath("$.createdBy", notNullValue()))
+                .andExpect(jsonPath("$.lastModifiedBy", notNullValue()))
+                .andExpect(jsonPath("$.kind", is(pet.getKind())))
                 .andExpect(jsonPath("$.age", is(pet.getAge())))
                 .andExpect(jsonPath("$.version", is(pet.getVersion()), Long.class))
                 .andExpect(jsonPath("$.createDateTime", is(pet.getCreateDateTime().toString())))

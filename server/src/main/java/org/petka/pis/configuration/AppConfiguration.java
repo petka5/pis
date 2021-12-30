@@ -11,6 +11,8 @@ import org.petka.pis.persistence.entities.BaseEntity;
 import org.petka.pis.persistence.repositories.CustomRepositoryImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
@@ -19,6 +21,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @EnableJpaRepositories(basePackages = "org.petka.pis.persistence.repositories",
         repositoryBaseClass = CustomRepositoryImpl.class)
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class AppConfiguration {
 
     /**
@@ -48,5 +51,15 @@ public class AppConfiguration {
         return List.of(Arrays.stream(BaseEntity.class.getDeclaredFields())
                                .map(Field::getName).toArray(String[]::new));
 
+    }
+
+    /**
+     * Create custom AuditorAware.
+     *
+     * @return {@link CustomAuditAware }
+     */
+    @Bean
+    public AuditorAware<String> auditorAware() {
+        return new CustomAuditAware();
     }
 }

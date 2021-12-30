@@ -370,6 +370,10 @@ components:
           format: uuid
         name:
           type: string
+        createdBy:
+          type: string
+        lastModifiedBy:
+          type: string
         kind:
           type: string
         age:
