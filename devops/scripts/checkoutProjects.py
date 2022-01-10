@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import argparse
+import glob
 import os
 import subprocess
 
@@ -25,29 +26,18 @@ class Color:
     END = '\033[0m'
 
 
-def get_list_of_sub_dirs(curr_dir):
+def get_git_dirs(curr_dir):
     """
-    Get all sub dirs in given directory
-    :param curr_dir: directory with git projects
+    Get all sub dirs that have .git dir in them.
+    :param curr_dir: Top level directory to search for git sub dirs.
     :type curr_dir: string
-    :return: list of sub dirs
-    :rtype: list
+    :return: List of directories that match the condition.
+    :rtype list
     """
-    return [f.path for f in os.scandir(curr_dir) if f.is_dir()]
+    return [os.path.dirname(d) for d in glob.glob(f'{curr_dir}/*/.git') if os.path.isdir(d)]
 
 
-def filter_git_dirs(*dirs):
-    """
-    Check if there is a .git dir in specific dir.
-    :param dirs: List of directory to filter.
-    :type dirs: list
-    :return: True if there is .git dir, otherwise False
-    :rtype boolean
-    """
-    return ".git" in map(os.path.basename, *map(get_list_of_sub_dirs, dirs))
-
-
-def check_is_master_branch(curr_dir):
+def filter_master_branch(curr_dir):
     """
     Check if the current git branch is master.
     :param curr_dir: Current working dir
@@ -77,13 +67,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--dir", type=str, help="Directory with git projects", required=True)
     args = parser.parse_args()
-    sub_dirs = get_list_of_sub_dirs(args.dir)
-    git_dirs = list(filter(filter_git_dirs, sub_dirs))
-    master_branch_dirs = list(filter(check_is_master_branch, git_dirs))
-    for mb_dir in master_branch_dirs:
+    for mb_dir in filter(filter_master_branch, get_git_dirs(args.dir)):
         print(f"{Color.BOLD}{'#' * 5}{' ' * 3}{mb_dir}{' ' * 3}{'#' * 5}{Color.RED}")
         checkout(mb_dir)
         print(f"{Color.END}")
+
+    print("Finished.")
 
 
 if __name__ == "__main__":
