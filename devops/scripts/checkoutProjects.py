@@ -8,6 +8,8 @@ import subprocess
 """
 This script checkouts all git projects that are in master branch in a given dir
 """
+__author__ = "Petar Georgiev"
+__email__ = "petar.georgiev@gmail.com"
 
 
 class Color:
@@ -34,7 +36,7 @@ def get_git_dirs(curr_dir):
     :return: List of directories that match the condition.
     :rtype list
     """
-    return [os.path.dirname(d) for d in glob.glob(f'{curr_dir}/*/.git') if os.path.isdir(d)]
+    return map(os.path.dirname, filter(os.path.isdir, glob.glob(f'{curr_dir}/*/.git')))
 
 
 def filter_master_branch(curr_dir):
