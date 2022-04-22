@@ -80,27 +80,6 @@ public class BaseService<T extends BaseEntity> {
     }
 
     /**
-     * Delete entity by id.
-     *
-     * @param id id
-     * @return entity
-     */
-    public Optional<T> delete(final UUID id) {
-        return this.findById(id).map(this::delete);
-    }
-
-    /**
-     * Delete entity by id and orgId.
-     *
-     * @param id    id
-     * @param orgId orgId
-     * @return entity
-     */
-    public Optional<T> deleteByIdAndOrgId(final UUID id, final UUID orgId) {
-        return this.findByIdAndOrgId(id, orgId).map(this::delete);
-    }
-
-    /**
      * Delete entity.
      *
      * @param entity
