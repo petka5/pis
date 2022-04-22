@@ -13,21 +13,18 @@ import org.springframework.stereotype.Service;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP2"}, justification = "OperatorBaseDelegate")
 public class OperatorPetsDelegator implements OperatorApiDelegate {
 
-    private final OperatorBaseDelegate<Pet, PetResponse, PetPageResponse> operatorBaseDelegate;
+    private final BaseDelegate<Pet, PetResponse, PetPageResponse> baseDelegate;
 
 
     @Override
     public ResponseEntity<PetResponse> operatorAddPet(final OperatorPetRequest pet) {
-        log.info("Creating pet");
-        return operatorBaseDelegate.add(pet, Pet.class, PetResponse.class);
+        return baseDelegate.create(pet, Pet.class, PetResponse.class);
     }
 
 
@@ -36,25 +33,21 @@ public class OperatorPetsDelegator implements OperatorApiDelegate {
                                                             final String filter,
                                                             final @DefaultValue("false") Boolean includeDeleted,
                                                             final @DefaultValue("false") Boolean includeCount) {
-        log.info("Getting all pets");
-        return operatorBaseDelegate.find(page, size, sort, filter, includeDeleted, includeCount, PetPageResponse.class);
+        return baseDelegate.findAll(page, size, sort, filter, includeDeleted, includeCount, PetPageResponse.class);
     }
 
     @Override
     public ResponseEntity<PetResponse> operatorFindPetById(final UUID id) {
-        log.info("Getting pet {}", id);
-        return operatorBaseDelegate.findById(id, PetResponse.class);
+        return baseDelegate.findById(id, PetResponse.class);
     }
 
     @Override
     public ResponseEntity<Void> operatorDeletePet(final UUID id) {
-        log.info("Deleting pet {}", id);
-        return operatorBaseDelegate.deleteById(id);
+        return baseDelegate.deleteById(id);
     }
 
     @Override
     public ResponseEntity<PetResponse> operatorUpdatePet(final UUID id, final Object body) {
-        log.info("Updating pet {}", id);
-        return operatorBaseDelegate.updateById(id, body, PetResponse.class);
+        return baseDelegate.updateById(id, body, PetResponse.class);
     }
 }

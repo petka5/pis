@@ -70,13 +70,23 @@ public class BaseService<T extends BaseEntity> {
     }
 
     /**
+     * Update entity.
+     *
+     * @param entity entity to be saved.
+     * @return entity
+     */
+    public T update(final @Valid T entity) {
+        return repository.save(entity);
+    }
+
+    /**
      * Delete entity by id.
      *
      * @param id id
      * @return entity
      */
-    public Optional<T> deleteById(final UUID id) {
-        return this.findById(id).map(this::deleteById);
+    public Optional<T> delete(final UUID id) {
+        return this.findById(id).map(this::delete);
     }
 
     /**
@@ -87,20 +97,16 @@ public class BaseService<T extends BaseEntity> {
      * @return entity
      */
     public Optional<T> deleteByIdAndOrgId(final UUID id, final UUID orgId) {
-        return this.findByIdAndOrgId(id, orgId).map(this::deleteById);
+        return this.findByIdAndOrgId(id, orgId).map(this::delete);
     }
 
     /**
-     * Update entity.
+     * Delete entity.
      *
-     * @param entity entity to be saved.
+     * @param entity
      * @return entity
      */
-    public T update(final @Valid T entity) {
-        return repository.save(entity);
-    }
-
-    private T deleteById(final T entity) {
+    public T delete(final T entity) {
         repository.deleteById(entity.getId());
         return entity;
     }

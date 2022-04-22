@@ -15,7 +15,7 @@ import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.petka.pis.delegators.OperatorBaseDelegate;
+import org.petka.pis.delegators.BaseDelegate;
 import org.petka.pis.delegators.OperatorPetsDelegator;
 import org.petka.pis.model.PetPageResponse;
 import org.petka.pis.model.PetResponse;
@@ -32,13 +32,13 @@ class OperatorPetsDelegateTest {
     private OperatorPetsDelegator operatorPetsDelegator;
 
     @Mock
-    private OperatorBaseDelegate<Pet, PetResponse, PetPageResponse> operatorBaseDelegate;
+    private BaseDelegate<Pet, PetResponse, PetPageResponse> baseDelegate;
 
     @Test
     @SneakyThrows
     void testUpdatePet() {
 
-        when(operatorBaseDelegate.updateById(any(UUID.class), any(Object.class), eq(PetResponse.class))).thenReturn(
+        when(baseDelegate.updateById(any(UUID.class), any(Object.class), eq(PetResponse.class))).thenReturn(
                 new ResponseEntity<>(HttpStatus.OK));
 
         ResponseEntity<PetResponse> response = operatorPetsDelegator.operatorUpdatePet(UUID.randomUUID(), new Object());
@@ -46,8 +46,8 @@ class OperatorPetsDelegateTest {
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        InOrder inOrder = inOrder(operatorBaseDelegate);
-        inOrder.verify(operatorBaseDelegate).updateById(any(), any(), any());
+        InOrder inOrder = inOrder(baseDelegate);
+        inOrder.verify(baseDelegate).updateById(any(), any(), any());
 
         inOrder.verifyNoMoreInteractions();
     }

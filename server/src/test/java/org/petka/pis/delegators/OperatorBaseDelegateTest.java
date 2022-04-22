@@ -29,7 +29,7 @@ import org.springframework.http.ResponseEntity;
 class OperatorBaseDelegateTest {
 
     @InjectMocks
-    private OperatorBaseDelegate<Pet, PetResponse, PetPageResponse> operatorBaseDelegate;
+    private BaseDelegate<Pet, PetResponse, PetPageResponse> baseDelegate;
 
     @Mock
     private BaseService<Pet> baseService;
@@ -47,7 +47,7 @@ class OperatorBaseDelegateTest {
         when(modelMapper.map(any(), any())).thenReturn(new Pet());
 
         ResponseEntity<PetResponse> response =
-                operatorBaseDelegate.updateById(UUID.randomUUID(), new Pet(), PetResponse.class);
+                baseDelegate.updateById(UUID.randomUUID(), new Pet(), PetResponse.class);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
