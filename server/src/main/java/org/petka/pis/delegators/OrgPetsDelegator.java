@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@SuppressFBWarnings(value = {"EI_EXPOSE_REP2"}, justification = "OperatorBaseDelegate")
+@SuppressFBWarnings(value = {"EI_EXPOSE_REP2"}, justification = "BaseDelegate")
 public class OrgPetsDelegator implements OrgIdApiDelegate {
 
     private final BaseDelegate<Pet, PetResponse, PetPageResponse> baseDelegate;

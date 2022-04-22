@@ -26,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
-class OperatorBaseDelegateTest {
+class BaseDelegateTest {
 
     @InjectMocks
     private BaseDelegate<Pet, PetResponse, PetPageResponse> baseDelegate;
