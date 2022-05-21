@@ -6,7 +6,7 @@ allprojects {
 }
 
 ext {
-    springBootVersion = '2.7.0'
+    springBootVersion = '2.6.8'
     springDependencyManagementVersion = '1.0.11.RELEASE'
     spotBugsVersion = '5.0.7'
     spotBugsAnnotationsVersion = "4.7.0"
