@@ -31,8 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP2"}, justification = "Model mapper could be changed.")
 public class BaseDelegate<E extends BaseEntity, R, P> {
 
-
-    private static final String ENTITY = "Entity";
     private final ModelMapper modelMapper;
     private final BaseService<E> baseService;
     private final SpecificationComponent specificationComponent;
@@ -47,7 +45,11 @@ public class BaseDelegate<E extends BaseEntity, R, P> {
      * @return entity created entity
      */
     public ResponseEntity<R> create(final Object request, final Class<E> entityType, final Class<R> responseType) {
-        return create(Optional.of(modelMapper.map(request, entityType)), responseType);
+
+        return Optional.of(modelMapper.map(request, entityType))
+                .map(e -> create(e, responseType))
+                .orElseGet(ResponseEntity.internalServerError()::build);
+
     }
 
     /**
@@ -61,15 +63,19 @@ public class BaseDelegate<E extends BaseEntity, R, P> {
      */
     public ResponseEntity<R> orgCreate(final UUID orgId, final Object request, final Class<E> entityType,
                                        final Class<R> responseType) {
-        Optional<E> entity = Optional.of(modelMapper.map(request, entityType))
+
+        return Optional.of(modelMapper.map(request, entityType))
                 .map(e -> e.toBuilder().orgId(orgId).build())
-                .map(entityType::cast);
-        return create(entity, responseType);
+                .map(entityType::cast)
+                .map(e -> create(e, responseType))
+                .orElseGet(ResponseEntity.internalServerError()::build);
     }
 
-    private ResponseEntity<R> create(final Optional<E> entity, final Class<R> responseType) {
+    private ResponseEntity<R> create(final E entity, final Class<R> responseType) {
         log.info("Creating {} entity", responseType.getSimpleName());
-        return entity.map(baseService::create).map(e -> modelMapper.map(e, responseType))
+        return Optional.ofNullable(entity)
+                .map(baseService::create)
+                .map(e -> modelMapper.map(e, responseType))
                 .map(e -> new ResponseEntity<>(e, HttpStatus.CREATED))
                 .orElseGet(ResponseEntity.internalServerError()::build);
     }
@@ -141,7 +147,9 @@ public class BaseDelegate<E extends BaseEntity, R, P> {
      * @return entity
      */
     public ResponseEntity<R> findById(final UUID id, final Class<R> responseType) {
-        return findById(baseService.findById(id), responseType);
+        return baseService.findById(id)
+                .map(e -> findById(e, responseType))
+                .orElseGet(ResponseEntity.notFound()::build);
     }
 
     /**
@@ -153,16 +161,20 @@ public class BaseDelegate<E extends BaseEntity, R, P> {
      * @return entity
      */
     public ResponseEntity<R> orgFindById(final UUID orgId, final UUID id, final Class<R> responseType) {
-        return findById(baseService.findByIdAndOrgId(id, orgId), responseType);
+        return baseService.findByIdAndOrgId(id, orgId)
+                .map(e -> findById(e, responseType))
+                .orElseGet(ResponseEntity.internalServerError()::build);
     }
 
-    private ResponseEntity<R> findById(final Optional<E> entity, final Class<R> responseType) {
-        log.info("Finding {} by id {}", entity.map(Object::getClass).map(Class::getSimpleName).orElse(ENTITY),
-                 entity.map(BaseEntity::getId).orElse(null));
-        return entity.map(e -> modelMapper.map(e, responseType))
+
+    private ResponseEntity<R> findById(final E entity, final Class<R> responseType) {
+        log.info("Finding {} by id {}", entity.getClass().getSimpleName(), entity.getId());
+        return Optional.of(entity)
+                .map(e -> modelMapper.map(e, responseType))
                 .map(ResponseEntity::ok)
                 .orElseGet(ResponseEntity.notFound()::build);
     }
+
 
     /**
      * Delete entity by id.
@@ -171,7 +183,9 @@ public class BaseDelegate<E extends BaseEntity, R, P> {
      * @return no content
      */
     public ResponseEntity<Void> deleteById(final UUID id) {
-        return delete(baseService.findById(id));
+        return baseService.findById(id)
+                .map(this::delete)
+                .orElseGet(ResponseEntity.notFound()::build);
     }
 
     /**
@@ -182,15 +196,17 @@ public class BaseDelegate<E extends BaseEntity, R, P> {
      * @return no content
      */
     public ResponseEntity<Void> orgDeleteById(final UUID orgId, final UUID id) {
-        return delete(baseService.findByIdAndOrgId(id, orgId));
+        return baseService.findByIdAndOrgId(id, orgId)
+                .map(this::delete)
+                .orElseGet(ResponseEntity.notFound()::build);
     }
 
-    private ResponseEntity<Void> delete(final Optional<E> entity) {
-        log.info("Deleting {} with id {}", entity.map(Object::getClass).map(Class::getSimpleName).orElse(ENTITY),
-                 entity.map(BaseEntity::getId).orElse(null));
-        return entity.map(baseService::delete)
+    private ResponseEntity<Void> delete(final E entity) {
+        log.info("Deleting {} with id {}", entity.getClass().getSimpleName(), entity.getId());
+        return Optional.of(entity)
+                .map(baseService::delete)
                 .map(e -> new ResponseEntity<Void>(HttpStatus.NO_CONTENT))
-                .orElseGet(ResponseEntity.notFound()::build);
+                .orElseGet(ResponseEntity.internalServerError()::build);
     }
 
     /**
@@ -202,7 +218,10 @@ public class BaseDelegate<E extends BaseEntity, R, P> {
      * @return updated entity
      */
     public ResponseEntity<R> updateById(final UUID id, final Object body, final Class<R> responseType) {
-        return updateById(baseService.findById(id), body, responseType);
+        return baseService.findById(id)
+                .map(e -> updateById(e, body, responseType))
+                .orElseGet(ResponseEntity.notFound()::build);
+
     }
 
     /**
@@ -216,18 +235,19 @@ public class BaseDelegate<E extends BaseEntity, R, P> {
      */
     public ResponseEntity<R> orgUpdateById(final UUID orgId, final UUID id, final Object body,
                                            final Class<R> responseType) {
-        return updateById(baseService.findByIdAndOrgId(id, orgId), body, responseType);
-
+        return baseService.findByIdAndOrgId(id, orgId)
+                .map(e -> updateById(e, body, responseType))
+                .orElseGet(ResponseEntity.notFound()::build);
     }
 
-    private ResponseEntity<R> updateById(final Optional<E> entity, final Object body,
+    private ResponseEntity<R> updateById(final E entity, final Object body,
                                          final Class<R> responseType) {
-        log.info("Updating {} with id {}", entity.map(Object::getClass).map(Class::getSimpleName).orElse(ENTITY),
-                 entity.map(BaseEntity::getId).orElse(null));
-        return entity.map(e -> patchComponent.patch(e, body))
+        log.info("Updating {} with id {}", entity.getClass().getSimpleName(), entity.getId());
+        return Optional.of(entity)
+                .map(e -> patchComponent.patch(e, body))
                 .map(baseService::update)
                 .map(e -> modelMapper.map(e, responseType))
                 .map(ResponseEntity::ok)
-                .orElseGet(ResponseEntity.notFound()::build);
+                .orElseGet(ResponseEntity.internalServerError()::build);
     }
 }

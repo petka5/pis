@@ -6,23 +6,23 @@ allprojects {
 }
 
 ext {
-    springBootVersion = '2.6.6'
+    springBootVersion = '2.7.0'
     springDependencyManagementVersion = '1.0.11.RELEASE'
-    spotBugsVersion = '5.0.5'
-    spotBugsAnnotationsVersion = "4.6.0"
+    spotBugsVersion = '5.0.7'
+    spotBugsAnnotationsVersion = "4.7.0"
     openApiGeneratorVersion = '5.4.0'
-    springCloudSleuthVersion = "3.1.1"
+    springCloudSleuthVersion = "3.1.2"
     jacksonDatabindNullableVersion = "0.2.2"
     modelMapperVersion = "3.1.0"
-    gitPropertiesVersion = "2.4.0"
-    springFilterVersion = "2.0.8"
-    jacksonDatabindVersion = "2.13.2.2"
-    jacksonCoreVersion = "2.13.2"
+    gitPropertiesVersion = "2.4.1"
+    springFilterVersion = "2.0.9"
+    jacksonDatabindVersion = "2.13.3"
+    jacksonCoreVersion = "2.13.3"
     hibernateValidatorVersion = "7.0.4.Final"
-    lombokVersion = "1.18.22"
-    chaosMonkeyVersion = "2.5.4"
-    keyCloakVersion = "16.1.1"
-    springdocVersion = "1.6.7"
+    lombokVersion = "1.18.24"
+    chaosMonkeyVersion = "2.6.1"
+    keyCloakVersion = "18.0.0"
+    springdocVersion = "1.6.8"
 }
 
 subprojects {

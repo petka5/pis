@@ -82,7 +82,7 @@ public class BaseService<T extends BaseEntity> {
     /**
      * Delete entity.
      *
-     * @param entity
+     * @param entity entity to be deleted.
      * @return entity
      */
     public T delete(final T entity) {
