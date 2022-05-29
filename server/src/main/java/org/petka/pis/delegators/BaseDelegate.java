@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.petka.pis.components.PatchComponent;
 import org.petka.pis.components.SpecificationComponent;
 import org.petka.pis.persistence.entities.BaseEntity;
+import org.petka.pis.persistence.entities.OrgBaseEntity;
 import org.petka.pis.services.BaseService;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.jpa.domain.Specification;
@@ -65,6 +66,7 @@ public class BaseDelegate<E extends BaseEntity, R, P> {
                                        final Class<R> responseType) {
 
         return Optional.of(modelMapper.map(request, entityType))
+                .map(OrgBaseEntity.class::cast)
                 .map(e -> e.toBuilder().orgId(orgId).build())
                 .map(entityType::cast)
                 .map(e -> create(e, responseType))

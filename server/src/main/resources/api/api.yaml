@@ -56,7 +56,7 @@ paths:
         content:
           application/json:
             schema:
-                $ref: '#/components/schemas/OperatorPetRequest'
+              $ref: '#/components/schemas/OperatorPetRequest'
         required: true
       responses:
         201:
@@ -333,6 +333,33 @@ components:
         type: string
         format: uuid
   schemas:
+    BaseEntity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdBy:
+          type: string
+        lastModifiedBy:
+          type: string
+        version:
+          type: integer
+          format: int64
+        createDateTime:
+          type: string
+        updateDateTime:
+          type: string
+        deleted:
+          type: boolean
+    OrgBaseEntity:
+      anyOf:
+        - $ref: '#/components/schemas/BaseEntity'
+        - type: object
+          properties:
+            orgId:
+              type: string
+              format: uuid
     OperatorPetRequest:
       required:
         - orgId
@@ -361,18 +388,10 @@ components:
           $ref: '#/components/schemas/Type'
     PetResponse:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/OrgBaseEntity'
       properties:
-        id:
-          type: string
-          format: uuid
-        orgId:
-          type: string
-          format: uuid
         name:
-          type: string
-        createdBy:
-          type: string
-        lastModifiedBy:
           type: string
         kind:
           type: string
@@ -381,15 +400,6 @@ components:
           format: int64
         type:
           $ref: '#/components/schemas/Type'
-        version:
-          type: integer
-          format: int64
-        createDateTime:
-          type: string
-        updateDateTime:
-          type: string
-        deleted:
-          type: boolean
     PetPageResponse:
       allOf:
         - $ref: '#/components/schemas/PageResponse'

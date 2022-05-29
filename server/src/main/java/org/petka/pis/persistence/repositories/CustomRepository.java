@@ -53,7 +53,8 @@ public interface CustomRepository<T, K extends Serializable> extends JpaReposito
      * @return entity
      */
     @NonNull
-    @Query("select e from #{#entityName} e where e.id = ?1 and e.orgId= ?2 and e.deleted = false")
+    @Query(value = "select e from #{#entityName} e where e.id = ?1 and e.orgId= ?2 and e.deleted = false",
+            nativeQuery = true)
     Optional<T> findByIdAndOrgId(@NonNull K id, @NonNull K orgId);
 
 }

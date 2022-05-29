@@ -6,7 +6,7 @@ plugins {
 
 openApiGenerate {
     generatorName = "spring"
-    library = 'spring-mvc'
+    library = 'spring-boot'
     inputSpec = "$rootProject.projectDir/server/src/main/resources/api/api.yaml".toString()
     outputDir = "$buildDir".toString()
     apiPackage = "${group}.${rootProject.name}.api"
@@ -14,6 +14,7 @@ openApiGenerate {
     //https://github.com/OpenAPITools/openapi-generator/pull/10581
     modelFilesConstrainedTo = []
     configOptions = [
+            useTags: "true",
             delegatePattern: "true",
             dateLibrary    : "java11"
     ]

@@ -2,7 +2,7 @@ package org.petka.pis.delegators;
 
 import java.util.UUID;
 
-import org.petka.pis.api.OrgIdApiDelegate;
+import org.petka.pis.api.OrganizationPetsApi;
 import org.petka.pis.model.PetPageResponse;
 import org.petka.pis.model.PetRequest;
 import org.petka.pis.model.PetResponse;
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP2"}, justification = "BaseDelegate")
-public class OrgPetsDelegator implements OrgIdApiDelegate {
+public class OrgPetsDelegator implements OrganizationPetsApi {
 
     private final BaseDelegate<Pet, PetResponse, PetPageResponse> baseDelegate;
 

@@ -36,9 +36,6 @@ public class BaseEntity {
     @GenericGenerator(name = "UUID", strategy = "uuid4")
     private UUID id;
 
-    @Column(updatable = false)
-    private UUID orgId;
-
     @CreatedBy
     @Column(updatable = false)
     private String createdBy;
