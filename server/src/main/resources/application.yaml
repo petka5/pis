@@ -2,9 +2,14 @@ openapi:
   petkaInfrastructureProject:
     base-path: /api
 
+server:
+  shutdown: graceful
+
 spring:
   application:
     name: PetkaInfra
+  lifecycle:
+    timeout-per-shutdown-phase: "60s"
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/pis}
