@@ -2,7 +2,6 @@ package org.petka.pis.persistence.repositories;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.lang.NonNull;
 
 /**
  * Implementation of the BaseRepository.
@@ -53,12 +51,5 @@ public class CustomRepositoryImpl<T, K extends Serializable> extends SimpleJpaRe
 
         return new SliceImpl<>(hasNext ? resultList.subList(0, pageable.getPageSize()) : resultList, pageable,
                                hasNext);
-    }
-
-    @NonNull
-    @Override
-    public Optional<T> findByIdAndOrgId(@SuppressWarnings("unused") @NonNull final K id,
-                                        @SuppressWarnings("unused") @NonNull final K orgId) {
-        return Optional.empty();
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PetService extends BaseService<Pet> {
+public class PetService extends OrgBaseService<Pet> {
 
     @Autowired
     public PetService(final PetRepository repository) {

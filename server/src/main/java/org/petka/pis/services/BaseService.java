@@ -10,10 +10,8 @@ import org.petka.pis.persistence.repositories.CustomRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-@Service
 @Validated
 public class BaseService<T extends BaseEntity> {
 
@@ -58,16 +56,6 @@ public class BaseService<T extends BaseEntity> {
         return repository.findById(id);
     }
 
-    /**
-     * Find entity by id and orgId.
-     *
-     * @param id    id
-     * @param orgId orgId
-     * @return entity
-     */
-    public Optional<T> findByIdAndOrgId(final UUID id, final UUID orgId) {
-        return repository.findByIdAndOrgId(id, orgId);
-    }
 
     /**
      * Update entity.

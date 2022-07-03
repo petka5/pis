@@ -2,29 +2,37 @@ package org.petka.pis.delegators;
 
 import java.util.UUID;
 
+import org.modelmapper.ModelMapper;
 import org.petka.pis.api.OperatorPetsApiDelegate;
+import org.petka.pis.components.PatchComponent;
+import org.petka.pis.components.SpecificationComponent;
 import org.petka.pis.model.OperatorPetRequest;
 import org.petka.pis.model.PetPageResponse;
 import org.petka.pis.model.PetResponse;
 import org.petka.pis.persistence.entities.Pet;
+import org.petka.pis.services.PetService;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP2"}, justification = "BaseDelegate")
-public class OperatorPetsDelegator implements OperatorPetsApiDelegate {
+public class OperatorPetsDelegator extends OrgBaseDelegate<Pet, PetResponse, PetPageResponse>
+        implements OperatorPetsApiDelegate {
 
-    private final BaseDelegate<Pet, PetResponse, PetPageResponse> baseDelegate;
 
+    public OperatorPetsDelegator(final ModelMapper modelMapper,
+                                 final PetService petService,
+                                 final SpecificationComponent specificationComponent,
+                                 final PatchComponent patchComponent) {
+        super(modelMapper, petService, specificationComponent, patchComponent);
+    }
 
     @Override
     public ResponseEntity<PetResponse> operatorAddPet(final OperatorPetRequest pet) {
-        return baseDelegate.create(pet, Pet.class, PetResponse.class);
+        return create(pet, Pet.class, PetResponse.class);
     }
 
 
@@ -33,21 +41,21 @@ public class OperatorPetsDelegator implements OperatorPetsApiDelegate {
                                                             final String filter,
                                                             final @DefaultValue("false") Boolean includeDeleted,
                                                             final @DefaultValue("false") Boolean includeCount) {
-        return baseDelegate.findAll(page, size, sort, filter, includeDeleted, includeCount, PetPageResponse.class);
+        return findAll(page, size, sort, filter, includeDeleted, includeCount, PetPageResponse.class);
     }
 
     @Override
     public ResponseEntity<PetResponse> operatorFindPetById(final UUID id) {
-        return baseDelegate.findById(id, PetResponse.class);
+        return findById(id, PetResponse.class);
     }
 
     @Override
     public ResponseEntity<Void> operatorDeletePet(final UUID id) {
-        return baseDelegate.deleteById(id);
+        return deleteById(id);
     }
 
     @Override
     public ResponseEntity<PetResponse> operatorUpdatePet(final UUID id, final Object body) {
-        return baseDelegate.updateById(id, body, PetResponse.class);
+        return updateById(id, body, PetResponse.class);
     }
 }

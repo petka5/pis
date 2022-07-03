@@ -13,7 +13,6 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +26,8 @@ import lombok.extern.slf4j.Slf4j;
  * @param <P> page response type
  */
 @Slf4j
-@Service
-@RequiredArgsConstructor
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP2"}, justification = "Model mapper could be changed.")
+@RequiredArgsConstructor
 public class BaseDelegate<E extends BaseEntity, R, P> {
 
     private final ModelMapper modelMapper;
@@ -154,22 +152,15 @@ public class BaseDelegate<E extends BaseEntity, R, P> {
                 .orElseGet(ResponseEntity.notFound()::build);
     }
 
+
     /**
-     * Get entity by id and org id.
+     * Find by id.
      *
-     * @param orgId        org id
-     * @param id           id
+     * @param entity       entity
      * @param responseType response type
-     * @return entity
+     * @return resposeEntity
      */
-    public ResponseEntity<R> orgFindById(final UUID orgId, final UUID id, final Class<R> responseType) {
-        return baseService.findByIdAndOrgId(id, orgId)
-                .map(e -> findById(e, responseType))
-                .orElseGet(ResponseEntity.internalServerError()::build);
-    }
-
-
-    private ResponseEntity<R> findById(final E entity, final Class<R> responseType) {
+    protected ResponseEntity<R> findById(final E entity, final Class<R> responseType) {
         log.info("Finding {} by id {}", entity.getClass().getSimpleName(), entity.getId());
         return Optional.of(entity)
                 .map(e -> modelMapper.map(e, responseType))
@@ -190,20 +181,14 @@ public class BaseDelegate<E extends BaseEntity, R, P> {
                 .orElseGet(ResponseEntity.notFound()::build);
     }
 
-    /**
-     * Delete entity.
-     *
-     * @param orgId org id
-     * @param id    id
-     * @return no content
-     */
-    public ResponseEntity<Void> orgDeleteById(final UUID orgId, final UUID id) {
-        return baseService.findByIdAndOrgId(id, orgId)
-                .map(this::delete)
-                .orElseGet(ResponseEntity.notFound()::build);
-    }
 
-    private ResponseEntity<Void> delete(final E entity) {
+    /**
+     * Delete given entity.
+     *
+     * @param entity entity.
+     * @return void.
+     */
+    protected ResponseEntity<Void> delete(final E entity) {
         log.info("Deleting {} with id {}", entity.getClass().getSimpleName(), entity.getId());
         return Optional.of(entity)
                 .map(baseService::delete)
@@ -226,24 +211,17 @@ public class BaseDelegate<E extends BaseEntity, R, P> {
 
     }
 
-    /**
-     * Update entity.
-     *
-     * @param orgId        org id
-     * @param id           id
-     * @param body         patch request
-     * @param responseType response type
-     * @return updated entity
-     */
-    public ResponseEntity<R> orgUpdateById(final UUID orgId, final UUID id, final Object body,
-                                           final Class<R> responseType) {
-        return baseService.findByIdAndOrgId(id, orgId)
-                .map(e -> updateById(e, body, responseType))
-                .orElseGet(ResponseEntity.notFound()::build);
-    }
 
-    private ResponseEntity<R> updateById(final E entity, final Object body,
-                                         final Class<R> responseType) {
+    /**
+     * Update given entity.
+     *
+     * @param entity       entity
+     * @param body         update body.
+     * @param responseType response type.
+     * @return response constructed with updated entity.
+     */
+    protected ResponseEntity<R> updateById(final E entity, final Object body,
+                                           final Class<R> responseType) {
         log.info("Updating {} with id {}", entity.getClass().getSimpleName(), entity.getId());
         return Optional.of(entity)
                 .map(e -> patchComponent.patch(e, body))
