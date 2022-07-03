@@ -19,6 +19,8 @@ tags:
     description: Operations over the organization pets.
   - name: Operator Pets
     description: Operations over all pets.
+  - name: Operator Orgs
+    description: Operation over all organization.
 paths:
   /operator/pets:
     get:
@@ -136,6 +138,122 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorModel'
+  /operator/org:
+    get:
+      tags:
+        - Operator Orgs
+      description: Returns all organization
+      operationId: operatorFindOrgs
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/includeDeleted'
+        - $ref: '#/components/parameters/includeCount'
+      responses:
+        200:
+          description: org response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrgPageResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+    post:
+      tags:
+        - Operator Orgs
+      description: Creates a new organization.
+      operationId: operatorAddOrg
+      requestBody:
+        description: Organization
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrgRequest'
+        required: true
+      responses:
+        201:
+          description: pet response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrgResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+  /operator/org/{id}:
+      get:
+        tags:
+          - Operator Orgs
+        description: Returns resource by the id
+        operationId: operatorFindOrgById
+        parameters:
+          - $ref: '#/components/parameters/id'
+        responses:
+          200:
+            description: Organization response
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/OrgResponse'
+          default:
+            description: unexpected error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/errorModel'
+      delete:
+        tags:
+          - Operator Orgs
+        description: deletes a single organization based on the ID supplied
+        operationId: operatorDeleteOrg
+        parameters:
+          - $ref: '#/components/parameters/id'
+        responses:
+          204:
+            description: org deleted
+            content: { }
+          default:
+            description: unexpected error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/errorModel'
+      patch:
+        tags:
+          - Operator Orgs
+        description: Partial update of the pet based on the ID supplied
+        operationId: operatorUpdateOrg
+        parameters:
+          - $ref: '#/components/parameters/id'
+        requestBody:
+          description: Organization elements that will be updated
+          content:
+            application/json:
+              schema:
+                type: object
+          required: true
+        responses:
+          200:
+            description: pet response
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/OrgResponse'
+          default:
+            description: unexpected error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/errorModel'
   /{orgId}/pets:
     get:
       tags:
@@ -440,6 +558,26 @@ components:
           format: int32
         message:
           type: string
+    OrgPageResponse:
+      allOf:
+        - $ref: '#/components/schemas/PageResponse'
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrgResponse'
+    OrgRequest:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+    OrgResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseEntity'
+        - $ref: '#/components/schemas/OrgRequest'
 x-api-first-error-mapping:
   404:
     - java.util.NoSuchElementException
