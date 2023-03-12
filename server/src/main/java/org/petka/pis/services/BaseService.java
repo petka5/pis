@@ -3,7 +3,7 @@ package org.petka.pis.services;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.petka.pis.persistence.entities.BaseEntity;
 import org.petka.pis.persistence.repositories.CustomRepository;

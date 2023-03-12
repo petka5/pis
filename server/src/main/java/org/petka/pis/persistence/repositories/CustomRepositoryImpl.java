@@ -3,8 +3,8 @@ package org.petka.pis.persistence.repositories;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

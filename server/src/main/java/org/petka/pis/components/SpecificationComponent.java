@@ -10,13 +10,20 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import com.turkraft.springfilter.boot.FilterSpecification;
+import com.turkraft.springfilter.converter.FilterSpecificationConverter;
+
+import lombok.RequiredArgsConstructor;
+
+//import com.turkraft.springfilter.boot.FilterSpecification;
 
 /**
  * SpecificationComponent.
  */
 @Component
+@RequiredArgsConstructor
 public class SpecificationComponent {
+
+    private final FilterSpecificationConverter filterSpecificationConverter;
 
     /**
      * Creates specification from the filter param.
@@ -27,7 +34,7 @@ public class SpecificationComponent {
      */
     public <T> Specification<T> createSpecification(final String filter) {
 
-        return Optional.ofNullable(filter).map(FilterSpecification<T>::new).map(Specification.class::cast)
+        return Optional.ofNullable(filter).map(filterSpecificationConverter::convert).map(Specification.class::cast)
                 .orElse(Specification.where(null));
     }
 
@@ -40,9 +47,11 @@ public class SpecificationComponent {
      * @return Specification
      */
     public <T> Specification<T> createSpecification(final String filter, final UUID orgId) {
-        return new FilterSpecification<>(
-                Optional.ofNullable(filter).map("orgId:'" .concat(orgId.toString()).concat("' and ")::concat)
-                        .orElse("orgId:'" .concat(orgId.toString()).concat("'")));
+        String orgFilter = Optional.ofNullable(filter)
+                .map("orgId:'".concat(orgId.toString()).concat("' and ")::concat)
+                .orElse("orgId:'".concat(orgId.toString()).concat("'"));
+
+        return filterSpecificationConverter.convert(orgFilter);
     }
 
 

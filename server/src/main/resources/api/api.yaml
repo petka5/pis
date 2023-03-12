@@ -471,7 +471,7 @@ components:
         deleted:
           type: boolean
     OrgBaseEntity:
-      anyOf:
+      allOf:
         - $ref: '#/components/schemas/BaseEntity'
         - type: object
           properties:

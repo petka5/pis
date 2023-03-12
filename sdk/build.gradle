@@ -14,7 +14,7 @@ openApiGenerate {
     modelPackage = "${group}.${rootProject.name}.sdk.model"
     modelFilesConstrainedTo = []
     configOptions = [
-            dateLibrary: "java11"
+            dateLibrary: "java8"
     ]
 }
 
@@ -33,6 +33,8 @@ jar {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "org.openapitools:openapi-generator:${openApiGeneratorVersion}"
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+
     implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
     implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
 }

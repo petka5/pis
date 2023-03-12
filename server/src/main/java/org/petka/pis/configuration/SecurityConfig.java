@@ -1,17 +1,11 @@
 package org.petka.pis.configuration;
 
-import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
-import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
@@ -21,39 +15,49 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 /**
  * KeyCloak security configuration.
  */
-@Configuration
-@EnableWebSecurity
-@ComponentScan(basePackageClasses = KeycloakSecurityComponents.class)
-public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+//@Configuration
+//@EnableWebSecurity
+//@ComponentScan(basePackageClasses = KeycloakSecurityComponents.class)
+public class SecurityConfig {
 
     /**
      * Global configuration.
      *
      * @param auth AuthenticationManagerBuilder
      */
-    @Autowired
+    //@Autowired
     public void configureGlobal(final AuthenticationManagerBuilder auth) {
 
-        KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
+        KeycloakAuthenticationProvider keycloakAuthenticationProvider = new KeycloakAuthenticationProvider();
         keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
         auth.authenticationProvider(keycloakAuthenticationProvider);
     }
 
-    @Bean
-    @Override
+    /**
+     * sessionAuthenticationStrategy.
+     *
+     * @return return.
+     */
+    //@Bean
     protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
         return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
     }
 
-    @Override
-    protected void configure(final HttpSecurity http) throws Exception {
-        super.configure(http);
+    /**
+     * configure.
+     *
+     * @param http http param
+     * @return SecurityFilterChain
+     */
+    //@Bean
+    public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         http.servletApi().rolePrefix("");
         http.csrf().disable().exceptionHandling().authenticationEntryPoint(new Http403ForbiddenEntryPoint());
 
-        http.authorizeRequests().antMatchers("/api.yaml").permitAll()
-                .antMatchers("/api/operator/**", "/api/operator**").hasAnyRole(Role.OPERATOR.getName())
-                .antMatchers("/api/**", "/api**").hasAnyRole(Role.ORGANIZATION.getName(), Role.OPERATOR.getName())
+        http.authorizeHttpRequests().requestMatchers("/api.yaml").permitAll()
+                .requestMatchers("/api/operator/**", "/api/operator**").hasAnyRole(Role.OPERATOR.getName())
+                .requestMatchers("/api/**", "/api**").hasAnyRole(Role.ORGANIZATION.getName(), Role.OPERATOR.getName())
                 .anyRequest().permitAll();
+        return http.build();
     }
 }

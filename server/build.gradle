@@ -7,18 +7,19 @@ plugins {
     id "com.gorylenko.gradle-git-properties" version "${gitPropertiesVersion}"
 }
 
+spotbugsMain {
+    reports {
+        html {
+            enabled = true
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
-
-    spotbugsMain {
-        reports {
-            html.enabled = true
-            html.stylesheet = 'fancy-hist.xsl'
-        }
-    }
-
 }
 
 dependencies {
@@ -31,19 +32,24 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation "org.modelmapper:modelmapper:${modelMapperVersion}"
     implementation "com.github.spotbugs:spotbugs-annotations:${spotBugsAnnotationsVersion}"
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
 
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
+    implementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.2.1'
+
+
     implementation "de.codecentric:chaos-monkey-spring-boot:${chaosMonkeyVersion}"
     implementation 'org.postgresql:postgresql'
-    implementation "org.springdoc:springdoc-openapi-ui:${springdocVersion}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
     implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudSleuthVersion}"
 
     implementation "org.keycloak:keycloak-spring-boot-starter"
 
-    implementation "com.turkraft:spring-filter:${springFilterVersion}"
+    implementation "com.turkraft.springfilter:jpa:${springFilterVersion}"
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"

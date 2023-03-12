@@ -6,23 +6,23 @@ allprojects {
 }
 
 ext {
-    springBootVersion = '2.6.8'
-    springDependencyManagementVersion = '1.0.11.RELEASE'
-    spotBugsVersion = '5.0.5'
-    spotBugsAnnotationsVersion = "4.6.0"
-    openApiGeneratorVersion = '6.0.0'
-    springCloudSleuthVersion = "3.1.2"
-    jacksonDatabindNullableVersion = "0.2.2"
-    modelMapperVersion = "3.1.0"
+    springBootVersion = '3.0.3'
+    springDependencyManagementVersion = '1.1.0'
+    spotBugsVersion = '5.0.13'
+    spotBugsAnnotationsVersion = "4.7.3"
+    openApiGeneratorVersion = '6.4.0'
+    springCloudSleuthVersion = "3.1.7"
+    jacksonDatabindNullableVersion = "0.2.6"
+    modelMapperVersion = "3.1.1"
     gitPropertiesVersion = "2.4.1"
-    springFilterVersion = "2.0.9"
-    jacksonDatabindVersion = "2.13.3"
-    jacksonCoreVersion = "2.13.3"
-    hibernateValidatorVersion = "7.0.4.Final"
-    lombokVersion = "1.18.24"
-    chaosMonkeyVersion = "2.6.1"
-    keyCloakVersion = "18.0.0"
-    springdocVersion = "1.6.8"
+    springFilterVersion = "3.0.1-SNAPSHOT"
+    jacksonDatabindVersion = "2.14.2"
+    jacksonCoreVersion = "2.14.2"
+    hibernateValidatorVersion = "8.0.0.Final"
+    lombokVersion = "1.18.26"
+    chaosMonkeyVersion = "2.7.0"
+    keyCloakVersion = "21.0.1"
+    springdocVersion = "2.0.3"
 }
 
 subprojects {
@@ -31,9 +31,10 @@ subprojects {
 
     repositories {
         mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 }
 
 wrapper {
-    gradleVersion = '7.4.2'
+    gradleVersion = '8.0.1'
 }

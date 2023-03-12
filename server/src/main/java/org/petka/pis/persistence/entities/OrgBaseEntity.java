@@ -2,8 +2,8 @@ package org.petka.pis.persistence.entities;
 
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

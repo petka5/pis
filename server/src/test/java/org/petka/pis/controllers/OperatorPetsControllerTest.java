@@ -64,7 +64,8 @@ class OperatorPetsControllerTest {
         @Bean
         @Primary
         public AuditorAware<String> auditorAware() {
-            return (AuditorAware) () -> Optional.of("Operator");
+            AuditorAware operator = () -> Optional.of("Operator");
+            return operator;
         }
     }
 
